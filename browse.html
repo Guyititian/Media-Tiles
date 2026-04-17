@@ -12,7 +12,7 @@ body {
   margin:20px;
 }
 
-/* Sticky header */
+/* HEADER */
 .header {
   position: sticky;
   top: 0;
@@ -22,18 +22,25 @@ body {
   border-bottom: 1px solid #222;
 }
 
-.header h1 {
+#brand {
   margin: 0;
   font-size: 18px;
-  opacity: 0.9;
+  cursor: pointer;
+  display: inline-block;
 }
 
-/* Tabs */
+#contextTitle {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+/* TABS */
 .tabs {
   display:flex;
   gap:10px;
   flex-wrap:wrap;
-  margin:10px 0;
+  margin-top:10px;
 }
 
 .tab {
@@ -43,6 +50,7 @@ body {
   cursor:pointer;
   font-size:14px;
   opacity:0.8;
+  user-select:none;
 }
 
 .tab.active {
@@ -51,7 +59,7 @@ body {
   opacity:1;
 }
 
-/* Search */
+/* SEARCH */
 input {
   width:100%;
   padding:10px;
@@ -60,7 +68,7 @@ input {
   border:none;
 }
 
-/* Sections */
+/* GROUPS */
 section {
   margin-bottom:30px;
 }
@@ -73,7 +81,7 @@ h2 {
   padding-left: 8px;
 }
 
-/* Grid */
+/* GRID */
 .grid {
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
@@ -85,7 +93,7 @@ h2 {
   padding:10px;
   border-radius:10px;
   text-align:center;
-  transition: 0.15s;
+  transition:0.15s;
 }
 
 .tile:hover {
@@ -105,7 +113,7 @@ button {
   cursor:pointer;
 }
 
-/* Toast */
+/* TOAST */
 #toast {
   position: fixed;
   bottom: 20px;
@@ -117,8 +125,8 @@ button {
   border-radius: 8px;
   font-size: 13px;
   opacity: 0;
-  pointer-events: none;
   transition: opacity 0.2s ease;
+  pointer-events:none;
 }
 </style>
 </head>
@@ -126,7 +134,8 @@ button {
 <body>
 
 <div class="header">
-  <h1 id="contextTitle">Browse</h1>
+  <h1 id="brand">Media Tiles</h1>
+  <div id="contextTitle"></div>
   <div class="tabs" id="tabs"></div>
 </div>
 
@@ -146,7 +155,7 @@ let currentCategory = "all";
 const params = new URLSearchParams(window.location.search);
 currentCategory = params.get("category") || "all";
 
-/* COPY WITH TOAST */
+/* COPY */
 function copy(text) {
   navigator.clipboard.writeText(text);
   showToast("Copied link");
@@ -162,14 +171,19 @@ function showToast(msg) {
   }, 900);
 }
 
+/* HOME BUTTON */
+document.getElementById("brand").onclick = () => {
+  window.location.href = "index.html";
+};
+
 /* HEADER CONTEXT */
 function updateHeader() {
-  const title = document.getElementById("contextTitle");
+  const context = document.getElementById("contextTitle");
 
   if (currentCategory === "all") {
-    title.textContent = "All Media Tiles";
+    context.textContent = "All Media Tiles";
   } else {
-    title.textContent = currentCategory.replace(/-/g, " ") + " • Media Tiles";
+    context.textContent = currentCategory.replace(/-/g, " ") + " collection";
   }
 }
 
@@ -206,7 +220,7 @@ function buildTabs() {
   });
 }
 
-/* KEEP TAB STATE */
+/* TAB STATE */
 function updateTabs() {
   document.querySelectorAll(".tab").forEach(tab => {
     const label = tab.textContent.toLowerCase().replace(/ /g, "-");
@@ -222,7 +236,7 @@ function updateTabs() {
   });
 }
 
-/* LOAD + GROUPED RENDER */
+/* LOAD GROUPED DATA */
 async function loadData() {
   const app = document.getElementById("app");
   app.innerHTML = "Loading...";
@@ -317,6 +331,7 @@ window.addEventListener("popstate", () => {
 updateHeader();
 buildTabs();
 loadData();
+
 </script>
 
 </body>
