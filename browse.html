@@ -12,14 +12,20 @@ body {
   margin:20px;
 }
 
-h1 { margin-bottom:10px; }
+/* Sticky header */
+.header {
+  position: sticky;
+  top: 0;
+  background: #111;
+  padding: 10px 0;
+  z-index: 20;
+  border-bottom: 1px solid #222;
+}
 
-input {
-  width:100%;
-  padding:10px;
-  margin:10px 0 15px;
-  border-radius:6px;
-  border:none;
+.header h1 {
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.9;
 }
 
 /* Tabs */
@@ -27,12 +33,7 @@ input {
   display:flex;
   gap:10px;
   flex-wrap:wrap;
-  margin-bottom:15px;
-  position:sticky;
-  top:0;
-  background:#111;
-  padding:10px 0;
-  z-index:10;
+  margin:10px 0;
 }
 
 .tab {
@@ -42,13 +43,21 @@ input {
   cursor:pointer;
   font-size:14px;
   opacity:0.8;
-  user-select:none;
 }
 
 .tab.active {
   background:white;
   color:black;
   opacity:1;
+}
+
+/* Search */
+input {
+  width:100%;
+  padding:10px;
+  margin:10px 0 15px;
+  border-radius:6px;
+  border:none;
 }
 
 /* Sections */
@@ -58,9 +67,10 @@ section {
 
 h2 {
   margin:20px 0 10px;
-  text-transform:capitalize;
-  font-size:18px;
-  opacity:0.9;
+  font-size:16px;
+  opacity:0.85;
+  border-left: 3px solid #333;
+  padding-left: 8px;
 }
 
 /* Grid */
@@ -75,6 +85,11 @@ h2 {
   padding:10px;
   border-radius:10px;
   text-align:center;
+  transition: 0.15s;
+}
+
+.tile:hover {
+  transform: translateY(-2px);
 }
 
 .tile img {
@@ -90,22 +105,36 @@ button {
   cursor:pointer;
 }
 
-/* App container */
-#app {
-  margin-top:10px;
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: black;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Browse Media Tiles</h1>
-
-<div class="tabs" id="tabs"></div>
+<div class="header">
+  <h1 id="contextTitle">Browse</h1>
+  <div class="tabs" id="tabs"></div>
+</div>
 
 <input id="search" placeholder="Search tiles..." />
 
 <div id="app">Loading...</div>
+
+<div id="toast">Copied</div>
 
 <script src="assets.js"></script>
 
@@ -113,16 +142,38 @@ button {
 let allItems = [];
 let currentCategory = "all";
 
-/* COPY FUNCTION */
-function copy(text) {
-  navigator.clipboard.writeText(text);
-}
-
 /* URL STATE */
 const params = new URLSearchParams(window.location.search);
 currentCategory = params.get("category") || "all";
 
-/* BUILD TABS */
+/* COPY WITH TOAST */
+function copy(text) {
+  navigator.clipboard.writeText(text);
+  showToast("Copied link");
+}
+
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.style.opacity = "1";
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+  }, 900);
+}
+
+/* HEADER CONTEXT */
+function updateHeader() {
+  const title = document.getElementById("contextTitle");
+
+  if (currentCategory === "all") {
+    title.textContent = "All Media Tiles";
+  } else {
+    title.textContent = currentCategory.replace(/-/g, " ") + " • Media Tiles";
+  }
+}
+
+/* TABS */
 function buildTabs() {
   const tabs = document.getElementById("tabs");
   tabs.innerHTML = "";
@@ -140,12 +191,13 @@ function buildTabs() {
     div.onclick = () => {
       currentCategory = cat;
 
-      const newUrl = cat === "all"
+      const url = cat === "all"
         ? "browse.html"
         : `browse.html?category=${cat}`;
 
-      history.pushState({}, "", newUrl);
+      history.pushState({}, "", url);
 
+      updateHeader();
       loadData();
       updateTabs();
     };
@@ -154,7 +206,7 @@ function buildTabs() {
   });
 }
 
-/* KEEP TAB STATE SYNCED */
+/* KEEP TAB STATE */
 function updateTabs() {
   document.querySelectorAll(".tab").forEach(tab => {
     const label = tab.textContent.toLowerCase().replace(/ /g, "-");
@@ -170,7 +222,7 @@ function updateTabs() {
   });
 }
 
-/* LOAD DATA (GROUPED VIEW) */
+/* LOAD + GROUPED RENDER */
 async function loadData() {
   const app = document.getElementById("app");
   app.innerHTML = "Loading...";
@@ -187,7 +239,6 @@ async function loadData() {
       const items = await fetchCategory(cat);
       allItems = allItems.concat(items);
 
-      // SECTION
       const section = document.createElement("section");
 
       const title = document.createElement("h2");
@@ -214,7 +265,7 @@ async function loadData() {
       container.appendChild(section);
 
     } catch (e) {
-      console.error("Error loading category:", cat, e);
+      console.error(e);
     }
   }
 
@@ -222,7 +273,7 @@ async function loadData() {
   app.appendChild(container);
 }
 
-/* SEARCH (FLATTENS RESULTS) */
+/* SEARCH */
 document.getElementById("search").addEventListener("input", (e) => {
   const q = e.target.value.toLowerCase();
 
@@ -257,14 +308,15 @@ window.addEventListener("popstate", () => {
   const params = new URLSearchParams(window.location.search);
   currentCategory = params.get("category") || "all";
 
+  updateHeader();
   loadData();
   updateTabs();
 });
 
 /* INIT */
+updateHeader();
 buildTabs();
 loadData();
-
 </script>
 
 </body>
