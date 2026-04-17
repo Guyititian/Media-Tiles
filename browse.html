@@ -17,7 +17,7 @@ h1 { margin-bottom:10px; }
 input {
   width:100%;
   padding:10px;
-  margin:10px 0;
+  margin:10px 0 15px;
   border-radius:6px;
   border:none;
 }
@@ -28,6 +28,11 @@ input {
   gap:10px;
   flex-wrap:wrap;
   margin-bottom:15px;
+  position:sticky;
+  top:0;
+  background:#111;
+  padding:10px 0;
+  z-index:10;
 }
 
 .tab {
@@ -37,6 +42,7 @@ input {
   cursor:pointer;
   font-size:14px;
   opacity:0.8;
+  user-select:none;
 }
 
 .tab.active {
@@ -69,12 +75,12 @@ button {
   margin-top:6px;
   width:100%;
   padding:6px;
+  cursor:pointer;
 }
 
 /* Loader */
-#loader {
-  text-align:center;
-  margin-top:40px;
+#app {
+  margin-top:10px;
 }
 </style>
 </head>
@@ -83,11 +89,11 @@ button {
 
 <h1>Browse Media Tiles</h1>
 
-<input id="search" placeholder="Search tiles..." />
-
 <div class="tabs" id="tabs"></div>
 
-<div id="app"></div>
+<input id="search" placeholder="Search tiles..." />
+
+<div id="app">Loading...</div>
 
 <script src="assets.js"></script>
 
@@ -95,35 +101,59 @@ button {
 let allItems = [];
 let currentCategory = "all";
 
+/* COPY */
 function copy(text) {
   navigator.clipboard.writeText(text);
 }
 
-/* GET CATEGORY FROM URL */
+/* READ URL STATE */
 const params = new URLSearchParams(window.location.search);
-const initialCategory = params.get("category") || "all";
+currentCategory = params.get("category") || "all";
 
 /* BUILD TABS */
 function buildTabs() {
   const tabs = document.getElementById("tabs");
+  tabs.innerHTML = "";
 
-  const allTab = ["all", "All"];
-  const tabList = [allTab, ...categories.map(c => [c, c])];
+  const tabList = ["all", ...categories];
 
-  tabList.forEach(([key, label]) => {
+  tabList.forEach(cat => {
     const div = document.createElement("div");
     div.className = "tab";
-    div.textContent = label.replace(/-/g," ");
 
-    if (key === initialCategory) div.classList.add("active");
+    if (cat === currentCategory) div.classList.add("active");
+
+    div.textContent = cat.replace(/-/g, " ");
 
     div.onclick = () => {
-      window.location.href = key === "all"
+      currentCategory = cat;
+
+      const newUrl = cat === "all"
         ? "browse.html"
-        : `browse.html?category=${key}`;
+        : `browse.html?category=${cat}`;
+
+      history.pushState({}, "", newUrl);
+
+      loadData();
+      updateTabs();
     };
 
     tabs.appendChild(div);
+  });
+}
+
+/* KEEP ACTIVE TAB IN SYNC */
+function updateTabs() {
+  document.querySelectorAll(".tab").forEach(tab => {
+    const match = tab.textContent.toLowerCase().replace(/ /g, "-");
+    if (
+      (currentCategory === "all" && tab.textContent.toLowerCase() === "all") ||
+      match === currentCategory
+    ) {
+      tab.classList.add("active");
+    } else {
+      tab.classList.remove("active");
+    }
   });
 }
 
@@ -142,7 +172,7 @@ function render(items) {
     tile.innerHTML = `
       <img src="${item.url}" onclick="copy('${item.url}')"/>
       <div>${item.name}</div>
-      <button onclick="copy('${item.url}')">Copy</button>
+      <button onclick="copy('${item.url}')">Copy Link</button>
     `;
 
     grid.appendChild(tile);
@@ -151,19 +181,23 @@ function render(items) {
   app.appendChild(grid);
 }
 
-/* LOAD DATA */
-async function load() {
-  document.getElementById("app").innerHTML = "<div id='loader'>Loading...</div>";
+/* LOAD DATA (NO PAGE RELOAD) */
+async function loadData() {
+  document.getElementById("app").innerHTML = "Loading...";
 
   allItems = [];
 
-  const list = initialCategory === "all"
+  const list = currentCategory === "all"
     ? categories
-    : [initialCategory];
+    : [currentCategory];
 
   for (const cat of list) {
-    const items = await fetchCategory(cat);
-    allItems = allItems.concat(items);
+    try {
+      const items = await fetchCategory(cat);
+      allItems = allItems.concat(items);
+    } catch (e) {
+      console.error("Error loading", cat, e);
+    }
   }
 
   render(allItems);
@@ -180,8 +214,19 @@ document.getElementById("search").addEventListener("input", (e) => {
   render(filtered);
 });
 
+/* BACK/FORWARD BUTTON SUPPORT */
+window.addEventListener("popstate", () => {
+  const params = new URLSearchParams(window.location.search);
+  currentCategory = params.get("category") || "all";
+
+  loadData();
+  updateTabs();
+});
+
+/* INIT */
 buildTabs();
-load();
+loadData();
+
 </script>
 
 </body>
