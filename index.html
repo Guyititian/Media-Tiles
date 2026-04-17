@@ -8,61 +8,78 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0f0f0f;
       color: white;
+
+      /* upgraded background */
+      background: radial-gradient(circle at top, #1a1a1a 0%, #0b0b0b 60%, #000 100%);
     }
 
     .container {
       max-width: 1000px;
       margin: 0 auto;
-      padding: 60px 20px;
+      padding: 70px 20px;
       text-align: center;
     }
 
     h1 {
-      font-size: 42px;
+      font-size: 46px;
       margin-bottom: 10px;
+      letter-spacing: 1px;
     }
 
     p {
       opacity: 0.7;
       margin-bottom: 30px;
+      font-size: 15px;
     }
 
     .cta {
       display: inline-block;
-      padding: 14px 28px;
-      background: white;
+      padding: 14px 30px;
+      background: linear-gradient(135deg, #ffffff, #cfcfcf);
       color: black;
-      border-radius: 10px;
+      border-radius: 12px;
       text-decoration: none;
       font-weight: bold;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: 0.2s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 30px;
-      text-align: left;
+      gap: 18px;
+      margin-top: 20px;
     }
 
     .card {
-      background: #1c1c1c;
-      padding: 18px;
-      border-radius: 12px;
-      transition: 0.2s;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 20px;
+      border-radius: 14px;
+      text-align: left;
+
+      backdrop-filter: blur(8px);
+      transition: 0.25s ease;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
 
     .card:hover {
-      transform: translateY(-3px);
-      background: #262626;
+      transform: translateY(-4px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
     }
 
     .card h3 {
       margin: 0 0 8px;
       text-transform: capitalize;
+      font-size: 18px;
     }
 
     .card p {
@@ -89,7 +106,7 @@
 <div class="container">
 
   <h1>Media Tiles</h1>
-  <p>A structured image library for franchises, genres, decades, and curated collections.</p>
+  <p>A structured visual library for franchises, genres, decades, and collections.</p>
 
   <a class="cta" href="browse.html">Enter Library</a>
 
@@ -121,7 +138,7 @@ function renderCategories() {
 
     card.innerHTML = `
       <h3>${prettyName(cat)}</h3>
-      <p>Browse items in ${prettyName(cat)}.</p>
+      <p>Browse ${prettyName(cat)} collection.</p>
     `;
 
     a.appendChild(card);
