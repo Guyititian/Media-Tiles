@@ -2,106 +2,102 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Media Tiles</title>
+<title>Media Tiles Ecosystem</title>
 
 <style>
 body {
-  margin:0;
-  background:#070707;
-  color:white;
-  font-family:Arial;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: white;
+
+  /* RESTORED DEPTH BACKGROUND */
+  background: radial-gradient(circle at top, #1b1b2a 0%, #0b0b10 55%, #050507 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ROOT STACK */
+/* MAIN LAYOUT */
 .container {
-  text-align:center;
+  text-align: center;
+  max-width: 900px;
+  padding: 40px;
 }
 
-/* =========================
-   FLOATING BRAND OBJECT
-========================= */
-.brand {
-  font-size:64px;
-  font-weight:600;
-
-  padding:26px 54px;
-  border-radius:24px;
-
-  display:inline-block;
-
-  background: rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.10);
+/* BRAND TILE (HERO FOCUS) */
+.brand-tile {
+  background: linear-gradient(145deg, #1e1e2e, #12121a);
+  padding: 38px 28px;
+  border-radius: 18px;
 
   box-shadow:
-    0 30px 90px rgba(0,0,0,0.85),
-    0 0 60px rgba(255,255,255,0.12);
+    0 0 40px rgba(140, 120, 255, 0.15),
+    0 20px 60px rgba(0,0,0,0.6);
 
-  backdrop-filter: blur(14px);
-
-  letter-spacing:1px;
-
-  margin-bottom:50px;
+  margin-bottom: 30px;
 }
 
-.sub {
-  font-size:13px;
-  opacity:0.55;
-  margin-top:-35px;
-  margin-bottom:50px;
+.brand-title {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-/* =========================
-   NAV CARDS (BIGGER + WEIGHTED)
-========================= */
+.brand-sub {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* NAV CARDS */
 .cards {
-  display:flex;
-  justify-content:center;
-  gap:50px;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
 }
 
+/* RESTORED DEPTH CARDS */
 .card {
-  width:380px;
-  padding:30px;
+  width: 300px;
+  padding: 26px;
+  border-radius: 16px;
+  cursor: pointer;
 
-  border-radius:20px;
+  background: linear-gradient(145deg, #1a1a1a, #101010);
 
-  background: rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.6),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
 
-  box-shadow: 0 25px 70px rgba(0,0,0,0.7);
-
-  cursor:pointer;
-
-  transition:0.25s;
+  transition: 0.25s ease;
+  text-align: left;
 }
 
 .card:hover {
-  transform:translateY(-12px);
+  transform: translateY(-6px) scale(1.01);
   box-shadow:
-    0 40px 110px rgba(0,0,0,0.9),
-    0 0 40px rgba(255,255,255,0.12);
+    0 18px 50px rgba(0,0,0,0.75),
+    0 0 25px rgba(130, 110, 255, 0.25);
 }
 
 .card h2 {
-  margin:0 0 12px;
-  font-size:22px;
+  margin: 0 0 10px 0;
+  font-size: 18px;
 }
 
 .card p {
-  font-size:13px;
-  opacity:0.7;
-  line-height:1.4;
+  font-size: 13px;
+  opacity: 0.7;
+  line-height: 1.5;
 }
 
 /* FOOTER */
 .footer {
-  margin-top:60px;
-  font-size:12px;
-  opacity:0.35;
+  margin-top: 40px;
+  font-size: 12px;
+  opacity: 0.45;
 }
 </style>
 </head>
@@ -110,20 +106,29 @@ body {
 
 <div class="container">
 
-  <div class="brand">Media Tiles</div>
+  <!-- BRAND HERO -->
+  <div class="brand-tile">
+    <div class="brand-title">Media Tiles</div>
+    <div class="brand-sub">Ecosystem Portal — Library • Tools • Media Processing</div>
+  </div>
 
-  <div class="sub">Ecosystem for media browsing and transformation</div>
-
+  <!-- NAV -->
   <div class="cards">
+
     <div class="card" onclick="window.location.href='./browse.html'">
-      <h2>Library</h2>
-      <p>Browse curated collections and copy media asset links.</p>
+      <h2>📚 Library</h2>
+      <p>Browse curated media tiles, explore collections, and copy direct asset links.</p>
     </div>
 
     <div class="card" onclick="window.location.href='https://guyititian.github.io/media-lab/'">
-      <h2>Tools</h2>
-      <p>Upload media and process it through motion + GIF pipelines.</p>
+      <h2>🛠 Tools</h2>
+      <p>Upload media, process GIF motion presets, and generate enhanced outputs.</p>
     </div>
+
+  </div>
+
+  <div class="footer">
+    Media Tiles Ecosystem • Unified Library + Processing Tools
   </div>
 
 </div>
