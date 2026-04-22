@@ -16,90 +16,81 @@ body {
   align-items:center;
 }
 
-/* OUTER LAYER */
+/* PAGE WRAPPER */
 .container {
   text-align:center;
   max-width:1000px;
 }
 
-/* 🔥 HERO BRAND (THIS IS THE FOCAL POINT AGAIN) */
-.hero {
-  padding:30px 50px;
-  border-radius:24px;
+/* =========================
+   BRAND (ANCHOR OBJECT)
+========================= */
+.brand-shell {
+  margin-bottom:50px;
+}
 
-  background: radial-gradient(circle at top,
-    rgba(255,255,255,0.08),
-    rgba(255,255,255,0.02),
-    transparent 70%
-  );
+.brand-core {
+  font-size:60px;
+  font-weight:600;
 
-  box-shadow:
-    0 30px 80px rgba(0,0,0,0.7),
-    0 0 60px rgba(255,255,255,0.08);
+  padding:20px 40px;
+  border-radius:20px;
 
   display:inline-block;
+
+  background: rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.10);
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,0.75),
+    0 0 50px rgba(255,255,255,0.10);
+
+  backdrop-filter: blur(12px);
+
+  letter-spacing:1px;
 }
 
-/* BIG BRAND TEXT */
-.hero h1 {
-  margin:0;
-  font-size:64px;
-
-  letter-spacing:2px;
-
-  background: linear-gradient(90deg, #ffffff, #bfbfbf);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  text-shadow:
-    0 0 40px rgba(255,255,255,0.25),
-    0 0 80px rgba(255,255,255,0.10);
+.brand-sub {
+  margin-top:12px;
+  font-size:13px;
+  opacity:0.6;
 }
 
-/* SUBTITLE BELOW HERO */
-.hero p {
-  margin-top:10px;
-  font-size:14px;
-  opacity:0.65;
-}
-
-/* TILE ROW */
+/* =========================
+   MAIN CARDS
+========================= */
 .cards {
   display:flex;
   justify-content:center;
   gap:40px;
-  margin-top:60px;
 }
 
-/* STRONGER TILE DEPTH */
 .card {
   width:340px;
   padding:26px;
+
   border-radius:18px;
 
   background: rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
 
-  box-shadow:
-    0 20px 50px rgba(0,0,0,0.6);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.65);
 
   cursor:pointer;
 
   transition:0.25s ease;
 }
 
-/* CLEAR LIFT */
 .card:hover {
-  transform: translateY(-12px);
+  transform:translateY(-10px);
   box-shadow:
-    0 35px 90px rgba(0,0,0,0.8),
-    0 0 30px rgba(255,255,255,0.10);
+    0 35px 90px rgba(0,0,0,0.85),
+    0 0 35px rgba(255,255,255,0.12);
 }
 
-/* CARD TEXT */
 .card h2 {
+  margin:0 0 10px;
   font-size:20px;
-  margin:0 0 8px;
 }
 
 .card p {
@@ -108,7 +99,7 @@ body {
   line-height:1.4;
 }
 
-/* FOOTER (PUSHED DOWN, NOT LOST) */
+/* FOOTER */
 .footer {
   margin-top:60px;
   font-size:12px;
@@ -121,27 +112,25 @@ body {
 
 <div class="container">
 
-  <div class="hero">
-    <h1>Media Tiles</h1>
-    <p>Ecosystem Portal — Browse • Transform • Generate</p>
+  <div class="brand-shell">
+    <div class="brand-core">Media Tiles</div>
+    <div class="brand-sub">Ecosystem Portal — Browse • Tools • Generate</div>
   </div>
 
   <div class="cards">
-
     <div class="card" onclick="window.location.href='./browse.html'">
       <h2>📚 Library</h2>
-      <p>Curated media tiles with structured collections and copyable asset links.</p>
+      <p>Curated media tiles with structured collections and asset links.</p>
     </div>
 
     <div class="card" onclick="window.location.href='https://guyititian.github.io/media-lab/'">
       <h2>🛠 Tools</h2>
-      <p>Upload media and process it through generation pipelines and presets.</p>
+      <p>Upload media and process it through generation presets and pipelines.</p>
     </div>
-
   </div>
 
   <div class="footer">
-    Connected media ecosystem for browsing and generation workflows
+    Unified media ecosystem for browsing and transformation
   </div>
 
 </div>
