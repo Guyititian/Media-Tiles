@@ -39,9 +39,9 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* BRAND (slightly larger + more presence) */
+/* BRAND */
 .brand {
-  font-size:20px; /* 🔥 increased from 18 */
+  font-size:20px;
   font-weight:800;
   cursor:pointer;
   letter-spacing: 0.3px;
@@ -51,10 +51,7 @@ body {
   color: var(--accent);
 }
 
-.brand:hover {
-  opacity:0.9;
-}
-
+/* CONTEXT */
 .context {
   font-size:12px;
   color: var(--muted);
@@ -70,7 +67,6 @@ input {
   color: var(--text);
   outline:none;
   margin-top:10px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.3);
 }
 
 /* TABS */
@@ -100,7 +96,6 @@ input {
   background: rgba(122,162,255,0.15);
   border-color: rgba(122,162,255,0.35);
   color: var(--text);
-  box-shadow: 0 10px 30px rgba(122,162,255,0.08);
 }
 
 /* CONTENT */
@@ -127,10 +122,7 @@ h2 {
   gap:14px;
 }
 
-/* =========================
-   🔥 TILE FIX (WINDOW MODEL)
-   removes bottom-heavy 3D imbalance
-========================= */
+/* TILE */
 .tile {
   background: linear-gradient(180deg,
     rgba(255,255,255,0.035),
@@ -140,13 +132,9 @@ h2 {
   border: 1px solid var(--border);
   border-radius: 14px;
   overflow:hidden;
-
   display:flex;
   flex-direction:column;
-
   transition: all 0.25s ease;
-
-  /* balanced depth (not bottom-heavy) */
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
@@ -156,25 +144,17 @@ h2 {
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
 }
 
-/* IMAGE = top anchor, clean window edge */
 .tile img {
   width:100%;
   aspect-ratio:16/9;
   object-fit:cover;
-  display:block;
-
-  /* subtle separation only */
-  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
-/* TITLE */
 .tile-title {
   padding:10px 10px 0 10px;
   font-size:13px;
-  line-height:1.3;
 }
 
-/* BUTTON */
 .tile button {
   margin:10px;
   padding:8px;
@@ -199,7 +179,6 @@ h2 {
   transition:0.2s;
   pointer-events:none;
 }
-
 </style>
 </head>
 
@@ -209,10 +188,8 @@ h2 {
 
   <div class="header">
 
-    <div class="brand-row">
-      <div class="brand" id="brand"><span>Media</span> Tiles</div>
-      <div class="context" id="contextTitle"></div>
-    </div>
+    <div class="brand" id="brand"><span>Media</span> Tiles</div>
+    <div class="context" id="contextTitle"></div>
 
     <input id="search" placeholder="Search library..." />
 
@@ -235,7 +212,10 @@ let currentCategory = "all";
 const params = new URLSearchParams(window.location.search);
 currentCategory = params.get("category") || "all";
 
-/* COPY */
+/* =========================
+   SAFE HELPERS
+========================= */
+
 function copy(text) {
   navigator.clipboard.writeText(text);
   const t = document.getElementById("toast");
@@ -243,21 +223,7 @@ function copy(text) {
   setTimeout(()=>t.style.opacity=0, 900);
 }
 
-/* BRAND */
-document.getElementById("brand").onclick = () => {
-  window.location.href = "index.html";
-};
-
-/* HEADER */
-function updateHeader() {
-  const el = document.getElementById("contextTitle");
-
-  el.textContent = currentCategory === "all"
-    ? "Library"
-    : formatCategory(currentCategory) + " / Library";
-}
-
-/* TITLE CASE FIX */
+/* 🔥 keeps GitHub-safe key but UI pretty */
 function formatCategory(str) {
   return str
     .split("-")
@@ -265,7 +231,32 @@ function formatCategory(str) {
     .join(" ");
 }
 
-/* TABS */
+/* =========================
+   BRAND NAV
+========================= */
+
+document.getElementById("brand").onclick = () => {
+  window.location.href = "index.html";
+};
+
+/* =========================
+   HEADER
+========================= */
+
+function updateHeader() {
+  const el = document.getElementById("contextTitle");
+
+  el.textContent = currentCategory === "all"
+    ? "Library"
+    : `${formatCategory(currentCategory)} / Library`;
+}
+
+/* =========================
+   TABS (CRITICAL FIX)
+   - fetch uses RAW key
+   - display uses formatted label
+========================= */
+
 function buildTabs() {
   const tabs = document.getElementById("tabs");
   tabs.innerHTML = "";
@@ -275,18 +266,21 @@ function buildTabs() {
   list.forEach(cat => {
     const d = document.createElement("div");
     d.className = "tab";
+
     if (cat === currentCategory) d.classList.add("active");
 
-    d.textContent = cat === "all"
-      ? "All"
-      : formatCategory(cat);
+    // UI ONLY formatting
+    d.textContent = cat === "all" ? "All" : formatCategory(cat);
 
     d.onclick = () => {
-      currentCategory = cat;
+      currentCategory = cat; // 🔥 ALWAYS raw key
+
       const url = cat === "all"
         ? "browse.html"
         : `browse.html?category=${cat}`;
+
       history.pushState({}, "", url);
+
       updateHeader();
       load();
       buildTabs();
@@ -296,7 +290,10 @@ function buildTabs() {
   });
 }
 
-/* LOAD */
+/* =========================
+   DATA LOAD (UNCHANGED LOGIC)
+========================= */
+
 async function load() {
   const app = document.getElementById("app");
   app.innerHTML = "";
@@ -309,12 +306,13 @@ async function load() {
 
   for (const cat of list) {
     const items = await fetchCategory(cat);
+
     allItems.push(...items);
 
     const section = document.createElement("section");
 
     const title = document.createElement("h2");
-    title.textContent = formatCategory(cat);
+    title.textContent = formatCategory(cat); // 🔥 UI FIX
 
     const grid = document.createElement("div");
     grid.className = "grid";
@@ -338,7 +336,10 @@ async function load() {
   }
 }
 
-/* SEARCH */
+/* =========================
+   SEARCH
+========================= */
+
 document.getElementById("search").addEventListener("input", e => {
   const q = e.target.value.toLowerCase();
 
@@ -368,6 +369,7 @@ document.getElementById("search").addEventListener("input", e => {
   app.appendChild(grid);
 });
 
+/* INIT */
 updateHeader();
 buildTabs();
 load();
