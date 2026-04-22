@@ -7,7 +7,7 @@
 <style>
 body {
   margin:0;
-  background:#0f0f0f;
+  background: radial-gradient(circle at top, #151515, #0b0b0b 60%);
   color:white;
   font-family:Arial;
   display:flex;
@@ -16,57 +16,76 @@ body {
   height:100vh;
 }
 
+/* CONTAINER */
 .container {
   text-align:center;
-  max-width:800px;
+  max-width:900px;
 }
 
+/* BRAND */
 h1 {
-  margin-bottom:6px;
-  font-size:28px;
+  font-size:52px;
+  margin-bottom:10px;
+  letter-spacing:2px;
+  background: linear-gradient(90deg, #ffffff, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 25px rgba(168,85,247,0.3);
 }
 
+/* SUBTEXT */
 .sub {
   opacity:0.6;
-  margin-bottom:40px;
-  font-size:14px;
+  margin-bottom:50px;
+  font-size:15px;
 }
 
+/* CARDS */
 .cards {
   display:flex;
-  gap:20px;
+  gap:30px;
   justify-content:center;
   flex-wrap:wrap;
 }
 
+/* CARD */
 .card {
-  background:#1c1c1c;
-  padding:22px;
-  border-radius:14px;
-  width:260px;
+  background:#181818;
+  padding:26px;
+  border-radius:16px;
+  width:280px;
   cursor:pointer;
-  transition:0.2s;
   text-align:left;
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  transition: all 0.25s ease;
 }
 
+/* HOVER = HALO EFFECT */
 .card:hover {
-  transform:translateY(-5px);
-  background:#242424;
+  transform:translateY(-6px) scale(1.02);
+  background:#202020;
+  box-shadow: 0 0 30px rgba(168,85,247,0.25);
+  border-color: rgba(168,85,247,0.4);
 }
 
+/* TITLE */
 .card h2 {
-  margin:0 0 10px 0;
-  font-size:18px;
+  margin:0 0 12px 0;
+  font-size:20px;
 }
 
+/* TEXT */
 .card p {
-  font-size:13px;
-  opacity:0.7;
-  line-height:1.4;
+  font-size:14px;
+  opacity:0.75;
+  line-height:1.5;
 }
 
+/* FOOTER */
 .footer {
-  margin-top:40px;
+  margin-top:50px;
   font-size:12px;
   opacity:0.4;
 }
@@ -77,7 +96,7 @@ h1 {
 
 <div class="container">
 
-  <h1>Media Tiles</h1>
+  <h1>MEDIA TILES</h1>
   <div class="sub">Ecosystem Portal</div>
 
   <div class="cards">
@@ -88,7 +107,7 @@ h1 {
       <p>Browse curated media tiles and copy direct asset links.</p>
     </div>
 
-    <!-- TOOLS (Media-Lab integration) -->
+    <!-- TOOLS -->
     <div class="card" onclick="window.location.href='https://guyititian.github.io/media-lab/'">
       <h2>🛠 Tools</h2>
       <p>Bring your own media, process it, and generate outputs.</p>
