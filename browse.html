@@ -28,7 +28,7 @@ body {
   padding: 28px;
 }
 
-/* HEADER */
+/* HEADER PANEL */
 .header {
   max-width:1100px;
   margin: 0 auto 18px auto;
@@ -39,27 +39,45 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* TOP ROW */
+/* BRAND ROW (NOW HAS VISUAL WEIGHT) */
 .brand-row {
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 
-/* BRAND (NOW MORE LIKE A BUTTON) */
+/* BRAND = PRIMARY ANCHOR */
 .brand {
-  font-size:20px;
-  font-weight:800;
-  cursor:pointer;
-  letter-spacing:0.3px;
+  font-size: 28px;
+  font-weight: 850;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .brand span {
   color: var(--accent);
 }
 
-/* NAV SWITCH (LIBRARY / TOOLS) */
+/* subtle anchor glow */
+.brand::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 18px rgba(122,162,255,0.8);
+  display: inline-block;
+}
+
+/* ECOSYSTEM NAV */
 .ecosystem-nav {
   display:flex;
   gap:10px;
@@ -86,7 +104,6 @@ body {
   background: rgba(122,162,255,0.15);
   border-color: rgba(122,162,255,0.35);
   color: var(--text);
-  box-shadow: 0 10px 30px rgba(122,162,255,0.08);
 }
 
 /* SEARCH */
@@ -143,7 +160,7 @@ input {
   gap:14px;
 }
 
-/* TILE (WINDOW STYLE FIXED DEPTH) */
+/* TILE (WINDOW STYLE - CLEAN DEPTH) */
 .tile {
   background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
   border: 1px solid var(--border);
@@ -258,11 +275,6 @@ document.getElementById("brand").onclick = () => {
   window.location.href = "index.html";
 };
 
-/* HEADER */
-function updateHeader() {
-  const el = document.getElementById("app");
-}
-
 /* TABS */
 function buildTabs() {
   const tabs = document.getElementById("tabs");
@@ -295,7 +307,7 @@ function buildTabs() {
   });
 }
 
-/* FAST PARALLEL LOAD */
+/* FAST LOAD */
 async function load() {
   const app = document.getElementById("app");
   app.innerHTML = "";
