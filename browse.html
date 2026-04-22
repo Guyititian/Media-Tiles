@@ -39,22 +39,20 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* BRAND ROW */
-.brand-row {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom: 10px;
-}
-
+/* BRAND (slightly larger + more presence) */
 .brand {
-  font-size:18px;
-  font-weight:700;
+  font-size:20px; /* 🔥 increased from 18 */
+  font-weight:800;
   cursor:pointer;
+  letter-spacing: 0.3px;
 }
 
 .brand span {
   color: var(--accent);
+}
+
+.brand:hover {
+  opacity:0.9;
 }
 
 .context {
@@ -62,7 +60,7 @@ body {
   color: var(--muted);
 }
 
-/* SEARCH = PRIMARY SURFACE */
+/* SEARCH */
 input {
   width:100%;
   padding:12px 14px;
@@ -111,12 +109,10 @@ input {
   margin: 0 auto;
 }
 
-/* SECTION SPACING FIX */
 section {
   margin-top: 26px;
 }
 
-/* SECTION TITLE */
 h2 {
   font-size:14px;
   font-weight:600;
@@ -124,40 +120,54 @@ h2 {
   color: var(--muted);
 }
 
-/* GRID (LESS CRAMPED) */
+/* GRID */
 .grid {
   display:grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap:14px;
 }
 
-/* TILE (MORE DEPTH + SCALE) */
+/* =========================
+   🔥 TILE FIX (WINDOW MODEL)
+   removes bottom-heavy 3D imbalance
+========================= */
 .tile {
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.035),
+    rgba(255,255,255,0.025)
+  );
+
   border: 1px solid var(--border);
   border-radius: 14px;
   overflow:hidden;
+
   display:flex;
   flex-direction:column;
+
   transition: all 0.25s ease;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+  /* balanced depth (not bottom-heavy) */
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
 .tile:hover {
   transform: translateY(-6px);
   border-color: rgba(122,162,255,0.25);
-  box-shadow: 0 18px 55px rgba(0,0,0,0.55);
+  box-shadow: 0 22px 60px rgba(0,0,0,0.6);
 }
 
-/* IMAGE */
+/* IMAGE = top anchor, clean window edge */
 .tile img {
   width:100%;
   aspect-ratio:16/9;
   object-fit:cover;
-  cursor:pointer;
+  display:block;
+
+  /* subtle separation only */
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
-/* TEXT */
+/* TITLE */
 .tile-title {
   padding:10px 10px 0 10px;
   font-size:13px;
@@ -241,9 +251,18 @@ document.getElementById("brand").onclick = () => {
 /* HEADER */
 function updateHeader() {
   const el = document.getElementById("contextTitle");
+
   el.textContent = currentCategory === "all"
     ? "Library"
-    : currentCategory.replace(/-/g," ") + " / Library";
+    : formatCategory(currentCategory) + " / Library";
+}
+
+/* TITLE CASE FIX */
+function formatCategory(str) {
+  return str
+    .split("-")
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }
 
 /* TABS */
@@ -258,11 +277,15 @@ function buildTabs() {
     d.className = "tab";
     if (cat === currentCategory) d.classList.add("active");
 
-    d.textContent = cat;
+    d.textContent = cat === "all"
+      ? "All"
+      : formatCategory(cat);
 
     d.onclick = () => {
       currentCategory = cat;
-      const url = cat === "all" ? "browse.html" : `browse.html?category=${cat}`;
+      const url = cat === "all"
+        ? "browse.html"
+        : `browse.html?category=${cat}`;
       history.pushState({}, "", url);
       updateHeader();
       load();
@@ -280,7 +303,9 @@ async function load() {
 
   allItems = [];
 
-  const list = currentCategory === "all" ? categories : [currentCategory];
+  const list = currentCategory === "all"
+    ? categories
+    : [currentCategory];
 
   for (const cat of list) {
     const items = await fetchCategory(cat);
@@ -289,7 +314,7 @@ async function load() {
     const section = document.createElement("section");
 
     const title = document.createElement("h2");
-    title.textContent = cat;
+    title.textContent = formatCategory(cat);
 
     const grid = document.createElement("div");
     grid.className = "grid";
@@ -316,10 +341,13 @@ async function load() {
 /* SEARCH */
 document.getElementById("search").addEventListener("input", e => {
   const q = e.target.value.toLowerCase();
+
   const app = document.getElementById("app");
   app.innerHTML = "";
 
-  const filtered = allItems.filter(i => i.name.toLowerCase().includes(q));
+  const filtered = allItems.filter(i =>
+    i.name.toLowerCase().includes(q)
+  );
 
   const grid = document.createElement("div");
   grid.className = "grid";
@@ -327,11 +355,13 @@ document.getElementById("search").addEventListener("input", e => {
   filtered.forEach(i => {
     const tile = document.createElement("div");
     tile.className = "tile";
+
     tile.innerHTML = `
       <img src="${i.url}" onclick="copy('${i.url}')"/>
       <div class="tile-title">${i.name}</div>
       <button onclick="copy('${i.url}')">Copy</button>
     `;
+
     grid.appendChild(tile);
   });
 
