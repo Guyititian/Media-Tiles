@@ -6,32 +6,42 @@
 
 <style>
 body {
-  background:#111;
+  background: radial-gradient(circle at top, #151515, #0b0b0b 70%);
   color:white;
   font-family:Arial;
-  margin:20px;
+  margin:0;
 }
 
 /* HEADER */
 .header {
   position: sticky;
   top: 0;
-  background: #111;
-  padding: 10px 0;
+  background: rgba(15,15,15,0.9);
+  backdrop-filter: blur(8px);
+  padding: 18px 20px;
   z-index: 20;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
+/* BRAND (NOW A REAL LOGO) */
 #brand {
   margin: 0;
-  font-size: 18px;
+  font-size: 28px;
   cursor: pointer;
+  letter-spacing:1px;
+
+  background: linear-gradient(90deg, #ffffff, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 20px rgba(168,85,247,0.25);
 }
 
+/* CONTEXT (LIBRARY INDICATOR) */
 #contextTitle {
-  font-size: 12px;
-  opacity: 0.6;
+  font-size: 13px;
   margin-top: 4px;
+  opacity: 0.6;
 }
 
 /* TABS */
@@ -39,71 +49,85 @@ body {
   display:flex;
   gap:10px;
   flex-wrap:wrap;
-  margin-top:10px;
+  margin-top:14px;
 }
 
 .tab {
-  padding:8px 12px;
-  background:#222;
-  border-radius:8px;
+  padding:8px 14px;
+  background:#1c1c1c;
+  border-radius:10px;
   cursor:pointer;
   font-size:14px;
   opacity:0.8;
+
+  transition: all 0.2s ease;
 }
 
+.tab:hover {
+  background:#252525;
+}
+
+/* ACTIVE TAB = HALO */
 .tab.active {
-  background:white;
-  color:black;
+  background:#a855f7;
+  color:white;
   opacity:1;
+  box-shadow: 0 0 12px rgba(168,85,247,0.5);
 }
 
 /* SEARCH */
 input {
-  width:100%;
-  padding:10px;
-  margin:10px 0 15px;
-  border-radius:6px;
+  width:calc(100% - 40px);
+  margin:20px;
+  padding:12px;
+  border-radius:10px;
   border:none;
+  background:#1c1c1c;
+  color:white;
 }
 
 /* SECTIONS */
 section {
-  margin-bottom:40px;
+  margin: 30px 20px;
   padding-bottom:10px;
-  border-bottom:1px solid #1c1c1c;
+  border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
 h2 {
-  margin:20px 0 10px;
-  font-size:16px;
-  opacity:0.85;
-  border-left:3px solid #333;
-  padding-left:8px;
+  margin:20px 0 12px;
+  font-size:18px;
+  opacity:0.9;
 }
 
 /* GRID */
 .grid {
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:16px;
 }
 
-/* TILE (FIXED LAYOUT) */
+/* TILE */
 .tile {
-  background:#222;
+  background:#1c1c1c;
   padding:10px;
-  border-radius:10px;
+  border-radius:12px;
   display:flex;
   flex-direction:column;
   height:100%;
-  transition:0.15s;
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  transition: all 0.2s ease;
 }
 
+/* TILE HOVER (MATCH TOOLS STYLE) */
 .tile:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 0 20px rgba(168,85,247,0.25);
+  border-color: rgba(168,85,247,0.3);
 }
 
-/* IMAGE (FORCED 16:9) */
+/* IMAGE */
 .tile img {
   width:100%;
   aspect-ratio:16 / 9;
@@ -112,9 +136,9 @@ h2 {
   cursor:pointer;
 }
 
-/* TITLE (CLAMPED) */
+/* TITLE */
 .tile-title {
-  margin-top:6px;
+  margin-top:8px;
   font-size:14px;
   display:-webkit-box;
   -webkit-line-clamp:2;
@@ -122,12 +146,17 @@ h2 {
   overflow:hidden;
 }
 
-/* BUTTON LOCKED TO BOTTOM */
+/* BUTTON */
 .tile button {
   margin-top:auto;
   width:100%;
-  padding:6px;
+  padding:7px;
   cursor:pointer;
+  border:none;
+  border-radius:8px;
+  background:#a855f7;
+  color:white;
+  font-size:13px;
 }
 
 /* TOAST */
@@ -152,8 +181,8 @@ h2 {
 <body>
 
 <div class="header">
-  <h1 id="brand">Media Tiles</h1>
-  <div id="contextTitle"></div>
+  <h1 id="brand">MEDIA TILES</h1>
+  <div id="contextTitle">Library</div>
   <div class="tabs" id="tabs"></div>
 </div>
 
@@ -202,9 +231,9 @@ function updateHeader() {
   const context = document.getElementById("contextTitle");
 
   if (currentCategory === "all") {
-    context.textContent = "All Media Tiles";
+    context.textContent = "Library • All Media Tiles";
   } else {
-    context.textContent = currentCategory.replace(/-/g, " ") + " collection";
+    context.textContent = "Library • " + currentCategory.replace(/-/g, " ");
   }
 }
 
