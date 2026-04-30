@@ -5,8 +5,6 @@
   "status": "Official",
   "platforms": ["Nuvio"],
   "catalogLayer": "AIOMetadata",
-  "packageType": "Nuvio Collection Pack",
-  "buildType": "Multi-Collection Pack",
   "category": "Full Build",
   "language": "English",
   "languageCode": "en",
