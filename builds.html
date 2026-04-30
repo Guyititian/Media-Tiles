@@ -136,7 +136,6 @@ body {
 
 .search {
   width:100%;
-  max-width:520px;
   padding:12px 14px;
   border-radius:12px;
   border:1px solid var(--border);
@@ -148,6 +147,63 @@ body {
 
 .search::placeholder {
   color:rgba(232,238,247,0.35);
+}
+
+.filter-row {
+  display:grid;
+  grid-template-columns: minmax(0, 1fr) 210px 210px;
+  gap:12px;
+  align-items:center;
+}
+
+.filter-select {
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+}
+
+.filter-select option {
+  color:#000;
+}
+
+.filter-summary {
+  margin-top:12px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.filter-pill {
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid rgba(122,162,255,0.25);
+  background:rgba(122,162,255,0.10);
+  color:var(--text);
+  font-size:12px;
+}
+
+.reset-btn {
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.03);
+  color:var(--muted);
+  border-radius:999px;
+  padding:5px 9px;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.reset-btn:hover {
+  color:var(--text);
+  border-color:rgba(122,162,255,0.25);
 }
 
 .grid {
@@ -264,6 +320,12 @@ body {
   color: rgba(255,255,255,0.35);
 }
 
+@media (max-width: 900px) {
+  .filter-row {
+    grid-template-columns:1fr;
+  }
+}
+
 @media (max-width: 760px) {
   .wrapper {
     padding:22px;
@@ -308,6 +370,7 @@ body {
       <div class="nav">
         <a href="./browse.html">Library</a>
         <a class="active" href="./builds.html">Builds</a>
+        <a href="./submit.html">Submit</a>
         <a href="https://guyititian.github.io/media-lab/">Tools</a>
       </div>
     </div>
@@ -320,7 +383,19 @@ body {
     <div class="divider"></div>
 
     <div class="controls">
-      <input id="searchInput" class="search" type="search" placeholder="Search builds..." />
+      <div class="filter-row">
+        <input id="searchInput" class="search" type="search" placeholder="Search builds..." />
+
+        <select id="categoryFilter" class="filter-select">
+          <option value="">All Categories</option>
+        </select>
+
+        <select id="languageFilter" class="filter-select">
+          <option value="">All Languages</option>
+        </select>
+      </div>
+
+      <div id="filterSummary" class="filter-summary"></div>
     </div>
 
     <div id="grid" class="grid">
@@ -328,7 +403,7 @@ body {
     </div>
 
     <div class="footer">
-      Media Tiles • Library • Builds • Tools
+      Media Tiles • Library • Builds • Submit • Tools
     </div>
 
   </div>
@@ -337,6 +412,9 @@ body {
 <script>
 const grid = document.getElementById("grid");
 const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const languageFilter = document.getElementById("languageFilter");
+const filterSummary = document.getElementById("filterSummary");
 
 let builds = [];
 
@@ -354,6 +432,14 @@ function platformText(build) {
   }
 
   return text(build.platform, "Nuvio");
+}
+
+function categoryText(build) {
+  return text(build.category, build.packageType || "Build Pack");
+}
+
+function languageText(build) {
+  return text(build.language, "Unknown");
 }
 
 function collectionsFrom(nuvio) {
@@ -390,25 +476,93 @@ function previewImagesFrom(nuvio) {
   return images;
 }
 
+function uniqueSorted(values) {
+  return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
+}
+
+function populateFilters() {
+  const categories = uniqueSorted(builds.map(categoryText));
+  const languages = uniqueSorted(builds.map(languageText));
+
+  categoryFilter.innerHTML = `<option value="">All Categories</option>` + categories.map(category =>
+    `<option value="${category}">${category}</option>`
+  ).join("");
+
+  languageFilter.innerHTML = `<option value="">All Languages</option>` + languages.map(language =>
+    `<option value="${language}">${language}</option>`
+  ).join("");
+}
+
+function activeFilters() {
+  return {
+    query: searchInput.value.trim().toLowerCase(),
+    category: categoryFilter.value,
+    language: languageFilter.value
+  };
+}
+
+function buildMatches(build, filters) {
+  const haystack = [
+    build.title,
+    build.creator,
+    build.status,
+    build.category,
+    build.packageType,
+    build.buildType,
+    build.description,
+    build.catalogLayer,
+    build.importStyle,
+    build.artworkHosting,
+    build.language,
+    build.languageCode,
+    ...(build.platforms || []),
+    ...(build.tags || [])
+  ].join(" ").toLowerCase();
+
+  const matchesSearch = !filters.query || haystack.includes(filters.query);
+  const matchesCategory = !filters.category || categoryText(build) === filters.category;
+  const matchesLanguage = !filters.language || languageText(build) === filters.language;
+
+  return matchesSearch && matchesCategory && matchesLanguage;
+}
+
+function renderFilterSummary(visibleCount) {
+  const filters = activeFilters();
+  const parts = [];
+
+  parts.push(`<span>${visibleCount} build${visibleCount === 1 ? "" : "s"} shown</span>`);
+
+  if (filters.query) {
+    parts.push(`<span class="filter-pill">Search: ${filters.query}</span>`);
+  }
+
+  if (filters.category) {
+    parts.push(`<span class="filter-pill">Category: ${filters.category}</span>`);
+  }
+
+  if (filters.language) {
+    parts.push(`<span class="filter-pill">Language: ${filters.language}</span>`);
+  }
+
+  if (filters.query || filters.category || filters.language) {
+    parts.push(`<button class="reset-btn" type="button" onclick="clearFilters()">Clear Filters</button>`);
+  }
+
+  filterSummary.innerHTML = parts.join("");
+}
+
+function clearFilters() {
+  searchInput.value = "";
+  categoryFilter.value = "";
+  languageFilter.value = "";
+  render();
+}
+
 function render() {
-  const query = searchInput.value.trim().toLowerCase();
+  const filters = activeFilters();
+  const visible = builds.filter(build => buildMatches(build, filters));
 
-  const visible = builds.filter(build => {
-    const haystack = [
-      build.title,
-      build.creator,
-      build.status,
-      build.category,
-      build.description,
-      build.catalogLayer,
-      build.importStyle,
-      build.artworkHosting,
-      ...(build.platforms || []),
-      ...(build.tags || [])
-    ].join(" ").toLowerCase();
-
-    return !query || haystack.includes(query);
-  });
+  renderFilterSummary(visible.length);
 
   if (!visible.length) {
     grid.innerHTML = `<div class="empty">No builds found.</div>`;
@@ -432,9 +586,9 @@ function render() {
 
           <div class="meta">
             <div>Platform: <strong>${platformText(build)}</strong></div>
-            <div>Catalog Layer: <strong>${text(build.catalogLayer, "aiometadata")}</strong></div>
-            <div>Pack Type: <strong>${text(build.category, build.packageType || "Build Pack")}</strong></div>
-            <div>Status: <strong>${text(build.status, "Community")}</strong></div>
+            <div>Catalog Layer: <strong>${text(build.catalogLayer, "AIOMetadata")}</strong></div>
+            <div>Category: <strong>${categoryText(build)}</strong></div>
+            <div>Language: <strong>${languageText(build)}</strong></div>
           </div>
 
           <a class="button" href="./build.html?slug=${encodeURIComponent(build.slug)}">View Build</a>
@@ -472,10 +626,12 @@ async function load() {
     }));
 
     builds.sort((a, b) => Number(b.featured) - Number(a.featured) || text(a.title).localeCompare(text(b.title)));
+    populateFilters();
     render();
 
   } catch (error) {
     console.error(error);
+    filterSummary.innerHTML = "";
     grid.innerHTML = `
       <div class="error">
         Could not load builds. Check that <strong>builds/index.json</strong> exists and that each listed build folder contains <strong>build.json</strong> and <strong>nuvio-collections.json</strong>.
@@ -485,6 +641,9 @@ async function load() {
 }
 
 searchInput.addEventListener("input", render);
+categoryFilter.addEventListener("change", render);
+languageFilter.addEventListener("change", render);
+
 load();
 </script>
 
