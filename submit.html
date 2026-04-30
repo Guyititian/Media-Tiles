@@ -147,8 +147,27 @@ body {
 }
 
 .panel h2 {
-  margin:0 0 14px 0;
+  margin:0 0 8px 0;
   font-size:20px;
+}
+
+.panel-intro {
+  margin:0 0 16px 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.step-label {
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(122,162,255,0.25);
+  background:rgba(122,162,255,0.12);
+  color:var(--text);
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:10px;
 }
 
 .panel p,
@@ -190,6 +209,13 @@ textarea {
   padding:11px 12px;
   outline:none;
   font-family: inherit;
+}
+
+input[readonly] {
+  color:rgba(232,238,247,0.72);
+  background:rgba(122,162,255,0.055);
+  border-color:rgba(122,162,255,0.18);
+  cursor:not-allowed;
 }
 
 textarea {
@@ -316,6 +342,13 @@ select option {
   color:var(--text);
 }
 
+.button.disabled,
+.button:disabled {
+  opacity:0.45;
+  cursor:not-allowed;
+  pointer-events:none;
+}
+
 .output {
   min-height:220px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -352,6 +385,20 @@ select option {
   color:var(--muted);
   font-size:13px;
   line-height:1.5;
+}
+
+.ready-box {
+  border:1px solid rgba(143,240,178,0.28);
+  background:rgba(143,240,178,0.055);
+  border-radius:14px;
+  padding:14px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.ready-box strong {
+  color:var(--good);
 }
 
 .hidden {
@@ -443,7 +490,7 @@ select option {
     <div class="divider"></div>
 
     <div class="notice">
-      This page does not publish your build automatically. It validates your metadata and JSON files locally in your browser, then generates a clean copy/paste submission package for review.
+      This page checks your files locally in your browser and creates a clean review package. It will not publish anything automatically.
     </div>
 
   </div>
@@ -455,7 +502,9 @@ select option {
       <main>
 
         <section class="panel">
-          <h2>Build Details</h2>
+          <span class="step-label">Step 1</span>
+          <h2>Describe Your Build</h2>
+          <p class="panel-intro">Give the build a clear title, language, category, and short description so users know what they are downloading.</p>
 
           <div class="form-grid">
 
@@ -519,14 +568,25 @@ select option {
 
             <div class="field">
               <label for="packageType">Pack Type</label>
-              <input id="packageType" value="Nuvio Collection Pack">
-              <div class="help">Default is fine for most submissions.</div>
+              <select id="packageType">
+                <option>Nuvio Collection Pack</option>
+                <option>Nuvio Full Build</option>
+                <option>Nuvio Artwork Pack</option>
+                <option>Other</option>
+              </select>
             </div>
 
             <div class="field">
               <label for="buildType">Build Type</label>
-              <input id="buildType" value="Community Build">
-              <div class="help">Examples: Full Build, Multi-Collection Pack, Genre Pack.</div>
+              <select id="buildType">
+                <option>Community Build</option>
+                <option>Full Build</option>
+                <option>Multi-Collection Pack</option>
+                <option>Single Collection Pack</option>
+                <option>Genre Pack</option>
+                <option>Franchise Pack</option>
+                <option>Other</option>
+              </select>
             </div>
 
             <div class="field full">
@@ -539,7 +599,9 @@ select option {
         </section>
 
         <section class="panel">
-          <h2>Compatibility Defaults</h2>
+          <span class="step-label">Step 2</span>
+          <h2>Build Standard</h2>
+          <p class="panel-intro">These locked fields keep community builds consistent. For now, Media Tiles submissions are Nuvio-first and use aiometadata as the catalog layer.</p>
 
           <div class="form-grid">
 
@@ -555,19 +617,21 @@ select option {
 
             <div class="field">
               <label for="artworkHosting">Artwork Hosting</label>
-              <input id="artworkHosting" value="Hosted URLs">
+              <input id="artworkHosting" value="Hosted URLs" readonly>
             </div>
 
             <div class="field">
               <label for="importStyle">Import Style</label>
-              <input id="importStyle" value="Nuvio collections JSON + aiometadata catalog export">
+              <input id="importStyle" value="Nuvio collections JSON + aiometadata catalog export" readonly>
             </div>
 
           </div>
         </section>
 
         <section class="panel">
-          <h2>Setup Notes</h2>
+          <span class="step-label">Step 3</span>
+          <h2>Add Setup Notes</h2>
+          <p class="panel-intro">These notes help new users understand how to use your build. The defaults are a good starting point.</p>
 
           <div class="form-grid">
 
@@ -591,7 +655,9 @@ Some artwork may be hosted externally and depends on the original host remaining
         </section>
 
         <section class="panel">
-          <h2>JSON Files</h2>
+          <span class="step-label">Step 4</span>
+          <h2>Add Required JSON Files</h2>
+          <p class="panel-intro">Choose the two exported JSON files from your device. They are checked locally and are not uploaded by this page.</p>
 
           <div class="file-row">
 
@@ -615,8 +681,22 @@ Some artwork may be hosted externally and depends on the original host remaining
           </div>
         </section>
 
+        <section class="panel" id="readyPanel">
+          <span class="step-label">Step 5</span>
+          <h2>Ready to Submit</h2>
+          <div id="readyBox" class="notice">
+            Generate a submission package first. Once validation passes, this area will show the final review steps and a prefilled GitHub issue button.
+          </div>
+
+          <div class="actions">
+            <button id="downloadBuildButton" class="button disabled" type="button" onclick="downloadBuildJson()">Download build.json</button>
+            <a id="githubIssueButton" class="button disabled" href="#" target="_blank" rel="noopener noreferrer">Open GitHub Issue</a>
+          </div>
+        </section>
+
         <section class="panel" id="outputPanel">
-          <h2>Generated build.json</h2>
+          <h2>Submission Package</h2>
+          <p class="panel-intro">This is the generated metadata file that should be included with the two JSON exports.</p>
           <textarea id="buildJsonOutput" class="output" readonly placeholder="Generated build.json will appear here."></textarea>
 
           <div class="actions">
@@ -626,11 +706,12 @@ Some artwork may be hosted externally and depends on the original host remaining
         </section>
 
         <section class="panel">
-          <h2>Copy/Paste Submission Text</h2>
+          <h2>Review Text</h2>
+          <p class="panel-intro">This text is used to prefill the GitHub issue and is also available as a manual copy/paste backup.</p>
           <textarea id="submissionOutput" class="output" readonly placeholder="Review-ready submission text will appear here."></textarea>
 
           <div class="actions">
-            <button class="button" type="button" onclick="copyOutput('submissionOutput')">Copy Submission Text</button>
+            <button class="button" type="button" onclick="copyOutput('submissionOutput')">Copy Review Text</button>
           </div>
         </section>
 
@@ -657,7 +738,7 @@ Some artwork may be hosted externally and depends on the original host remaining
 
         <section class="panel">
           <h2>Required Files</h2>
-          <p>The final build folder should contain:</p>
+          <p>The final review package should include:</p>
           <div>
             <span class="badge">build.json</span>
             <span class="badge">nuvio-collections.json</span>
@@ -666,13 +747,13 @@ Some artwork may be hosted externally and depends on the original host remaining
         </section>
 
         <section class="panel">
-          <h2>Review Checklist</h2>
+          <h2>How Review Works</h2>
           <ul class="checklist">
-            <li>Build title and creator are filled in.</li>
-            <li>Nuvio JSON validates as a collection array.</li>
-            <li>aiometadata JSON validates with a catalogs array.</li>
-            <li>Artwork URLs appear intentional.</li>
-            <li>Setup notes explain any unusual requirements.</li>
+            <li>Generate the submission package.</li>
+            <li>Download the generated build.json.</li>
+            <li>Open the prefilled GitHub issue.</li>
+            <li>Attach build.json and both JSON exports.</li>
+            <li>Submit for review.</li>
           </ul>
         </section>
 
@@ -687,10 +768,13 @@ Some artwork may be hosted externally and depends on the original host remaining
 <div id="toast">Copied</div>
 
 <script>
+const GITHUB_ISSUE_URL = "https://github.com/Guyititian/media-tiles/issues/new";
+
 let parsedNuvio = null;
 let parsedAio = null;
 let latestBuildJson = "";
 let latestFolderName = "";
+let latestIssueUrl = "";
 
 document.getElementById("brand").onclick = () => {
   window.location.href = "index.html";
@@ -919,8 +1003,8 @@ function buildJsonObject() {
     lastUpdated: new Date().toISOString().slice(0, 10),
     nuvioJson: "nuvio-collections.json",
     aioJson: "aiometadata-catalogs.json",
-    artworkHosting: text(document.getElementById("artworkHosting").value, "Hosted URLs"),
-    importStyle: text(document.getElementById("importStyle").value, "Nuvio collections JSON + aiometadata catalog export"),
+    artworkHosting: "Hosted URLs",
+    importStyle: "Nuvio collections JSON + aiometadata catalog export",
     setupNotes: linesFromTextarea("setupNotes"),
     knownIssues: linesFromTextarea("knownIssues")
   };
@@ -983,10 +1067,10 @@ Detected Stats:
 - Focus GIFs: ${stats.focusGifs}
 - aiometadata Catalogs: ${stats.aioCatalogs}
 
-Files Included / Required:
+Files to Attach:
 - build.json
-- nuvio-collections.json  ${nuvioFilename ? `(submitted file: ${nuvioFilename})` : ""}
-- aiometadata-catalogs.json  ${aioFilename ? `(submitted file: ${aioFilename})` : ""}
+- nuvio-collections.json ${nuvioFilename ? `(original submitted file: ${nuvioFilename})` : ""}
+- aiometadata-catalogs.json ${aioFilename ? `(original submitted file: ${aioFilename})` : ""}
 
 Setup Notes:
 ${build.setupNotes.map(note => `- ${note}`).join("\n") || "- None provided"}
@@ -1005,11 +1089,67 @@ Reviewer Checklist:
 - Confirm build category and language metadata are accurate.`;
 }
 
+function buildGitHubIssueUrl(build, submissionBody) {
+  const title = `Build Submission: ${build.title}`;
+  const body = `${submissionBody}
+
+Important:
+Please attach the following three files to this issue before submitting:
+1. build.json
+2. nuvio-collections.json
+3. aiometadata-catalogs.json`;
+
+  return `${GITHUB_ISSUE_URL}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+}
+
+function updateReadyPanel(build, issueUrl) {
+  const readyBox = document.getElementById("readyBox");
+  const issueButton = document.getElementById("githubIssueButton");
+  const downloadButton = document.getElementById("downloadBuildButton");
+
+  latestIssueUrl = issueUrl;
+
+  readyBox.className = "ready-box";
+  readyBox.innerHTML = `
+    <strong>Submission package ready.</strong><br><br>
+    1. Download the generated <strong>build.json</strong> file.<br>
+    2. Click <strong>Open GitHub Issue</strong> to open a prefilled review request.<br>
+    3. Attach these three files to the issue before submitting:<br>
+    &nbsp;&nbsp;• build.json<br>
+    &nbsp;&nbsp;• nuvio-collections.json<br>
+    &nbsp;&nbsp;• aiometadata-catalogs.json<br><br>
+    Suggested folder: <strong>builds/${build.slug}/</strong>
+  `;
+
+  issueButton.href = issueUrl;
+  issueButton.classList.remove("disabled");
+  downloadButton.classList.remove("disabled");
+}
+
+function resetReadyPanel() {
+  const readyBox = document.getElementById("readyBox");
+  const issueButton = document.getElementById("githubIssueButton");
+  const downloadButton = document.getElementById("downloadBuildButton");
+
+  readyBox.className = "notice";
+  readyBox.innerHTML = "Generate a submission package first. Once validation passes, this area will show the final review steps and a prefilled GitHub issue button.";
+
+  issueButton.href = "#";
+  issueButton.classList.add("disabled");
+  downloadButton.classList.add("disabled");
+  latestIssueUrl = "";
+}
+
 async function generatePackage() {
   const validationMessages = requiredFieldMessages();
 
   let nuvioResult = null;
   let aioResult = null;
+
+  parsedNuvio = null;
+  parsedAio = null;
+  latestBuildJson = "";
+  resetReadyPanel();
 
   try {
     nuvioResult = await readJsonFile("nuvioFile");
@@ -1058,16 +1198,20 @@ async function generatePackage() {
 
   const build = buildJsonObject();
   const stats = statsFrom(parsedNuvio, parsedAio);
-
-  latestBuildJson = JSON.stringify(build, null, 2);
-
-  document.getElementById("buildJsonOutput").value = latestBuildJson;
-  document.getElementById("submissionOutput").value = submissionText(
+  const body = submissionText(
     build,
     stats,
     nuvioResult ? nuvioResult.filename : "",
     aioResult ? aioResult.filename : ""
   );
+  const issueUrl = buildGitHubIssueUrl(build, body);
+
+  latestBuildJson = JSON.stringify(build, null, 2);
+
+  document.getElementById("buildJsonOutput").value = latestBuildJson;
+  document.getElementById("submissionOutput").value = body;
+
+  updateReadyPanel(build, issueUrl);
 
   renderValidation([
     {
@@ -1122,6 +1266,8 @@ function resetOutputs() {
     <div class="stat"><span>Sources</span><strong>—</strong></div>
     <div class="stat"><span>AIO Catalogs</span><strong>—</strong></div>
   `;
+
+  resetReadyPanel();
 }
 </script>
 
