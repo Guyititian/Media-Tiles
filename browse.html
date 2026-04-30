@@ -38,11 +38,12 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* BRAND (slightly more presence but not overdone) */
+/* BRAND */
 .brand-row {
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:16px;
   margin-bottom: 14px;
   padding: 10px 12px;
   border-radius: 14px;
@@ -51,7 +52,7 @@ body {
 }
 
 .brand {
-  font-size: 32px;   /* increased for hierarchy */
+  font-size: 32px;
   font-weight: 900;
   cursor: pointer;
   letter-spacing: 0.5px;
@@ -63,6 +64,8 @@ body {
 .ecosystem-nav {
   display:flex;
   gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 
 .nav-btn {
@@ -73,6 +76,13 @@ body {
   background: rgba(255,255,255,0.03);
   color: var(--muted);
   cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+}
+
+.nav-btn:hover {
+  color: var(--text);
+  border-color: rgba(122,162,255,0.25);
 }
 
 .nav-btn.active {
@@ -81,7 +91,7 @@ body {
   color: var(--text);
 }
 
-/* SEARCH (FIXED CONTAINMENT BUG) */
+/* SEARCH */
 input {
   width:100%;
   display:block;
@@ -133,7 +143,7 @@ input {
   gap:14px;
 }
 
-/* TILE (WINDOW STYLE STABLE DEPTH) */
+/* TILE */
 .tile {
   background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
   border: 1px solid var(--border);
@@ -187,6 +197,25 @@ input {
   transition:0.2s;
   pointer-events:none;
 }
+
+@media (max-width: 720px) {
+  .page {
+    padding: 20px;
+  }
+
+  .brand-row {
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .ecosystem-nav {
+    justify-content:flex-start;
+  }
+
+  .brand {
+    font-size:28px;
+  }
+}
 </style>
 </head>
 
@@ -201,10 +230,10 @@ input {
       <div class="brand" id="brand"><span>Media</span> Tiles</div>
 
       <div class="ecosystem-nav">
-        <div class="nav-btn active">Library</div>
-        <div class="nav-btn" onclick="window.location.href='https://guyititian.github.io/media-lab/'">
-          Tools
-        </div>
+        <a class="nav-btn" href="./index.html">Home</a>
+        <a class="nav-btn active" href="./browse.html">Library</a>
+        <a class="nav-btn" href="./builds.html">Builds</a>
+        <a class="nav-btn" href="https://guyititian.github.io/media-lab/">Tools</a>
       </div>
 
     </div>
@@ -228,7 +257,6 @@ input {
 let allItems = [];
 let currentCategory = "all";
 
-/* SAFE CATEGORY GUARD (prevents blank page if assets.js fails) */
 const safeCategories = (typeof categories !== "undefined")
   ? categories
   : ["genres","franchises","decades","networks","people","studios","special"];
@@ -284,7 +312,6 @@ function buildTabs() {
 
     if (cat === currentCategory) d.classList.add("active");
 
-    // visual only capitalization (no structural change)
     d.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
 
     d.onclick = () => {
