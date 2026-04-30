@@ -602,7 +602,7 @@ select option {
 
             <div class="field full">
               <label for="tags">Tags</label>
-              <input id="tags" placeholder="nuvio, aiometadata, genres, franchises">
+              <input id="tags" placeholder="nuvio, AIOMetadata, genres, franchises">
               <div class="help">Comma-separated. These help search and filtering later.</div>
             </div>
 
@@ -612,7 +612,7 @@ select option {
         <section class="panel">
           <span class="step-label">Step 2</span>
           <h2>Build Standard</h2>
-          <p class="panel-intro">These locked fields keep community builds consistent. For now, Media Tiles submissions are Nuvio-first and use aiometadata as the catalog layer.</p>
+          <p class="panel-intro">These locked fields keep community builds consistent. For now, Media Tiles submissions are Nuvio-first and use AIOMetadata as the catalog layer.</p>
 
           <div class="form-grid">
 
@@ -623,7 +623,7 @@ select option {
 
             <div class="field">
               <label for="catalogLayer">Catalog Layer</label>
-              <input id="catalogLayer" value="aiometadata" readonly>
+              <input id="catalogLayer" value="AIOMetadata" readonly>
             </div>
 
             <div class="field">
@@ -633,7 +633,7 @@ select option {
 
             <div class="field">
               <label for="importStyle">Import Style</label>
-              <input id="importStyle" value="Nuvio collections JSON + aiometadata catalog export" readonly>
+              <input id="importStyle" value="Nuvio collections JSON + AIOMetadata catalog export" readonly>
             </div>
 
           </div>
@@ -648,9 +648,9 @@ select option {
 
             <div class="field full">
               <label for="setupNotes">Setup Notes</label>
-              <textarea id="setupNotes">Import the aiometadata catalog export first.
+              <textarea id="setupNotes">Import the AIOMetadata catalog export first.
 Then import or recreate the Nuvio collections.
-Review catalog mappings inside Nuvio after import, especially if your aiometadata instance or addon ID differs from the creator setup.
+Review catalog mappings inside Nuvio after import, especially if your AIOMetadata instance or addon ID differs from the creator setup.
 Artwork is loaded from the URLs included in the Nuvio collections JSON.</textarea>
               <div class="help">One note per line.</div>
             </div>
@@ -679,7 +679,7 @@ Some artwork may be hosted externally and depends on the original host remaining
             </div>
 
             <div class="field">
-              <label for="aioFile">aiometadata Catalog Export JSON *</label>
+              <label for="aioFile">AIOMetadata Catalog Export JSON *</label>
               <input id="aioFile" type="file" accept=".json,application/json">
               <div class="help">Expected structure: object with a catalogs array.</div>
             </div>
@@ -897,9 +897,9 @@ function updateLiveChecklist() {
       help: "Choose the exported Nuvio collections JSON."
     },
     {
-      label: "aiometadata JSON",
+      label: "AIOMetadata JSON",
       complete: hasFile("aioFile"),
-      help: "Choose the aiometadata catalog export JSON."
+      help: "Choose the AIOMetadata catalog export JSON."
     }
   ];
 
@@ -1023,14 +1023,14 @@ function validateAio(aio) {
   if (!aio || !Array.isArray(aio.catalogs)) {
     return [{
       type: "bad",
-      title: "aiometadata JSON",
-      message: "aiometadata JSON should have a top-level catalogs array."
+      title: "AIOMetadata JSON",
+      message: "AIOMetadata JSON should have a top-level catalogs array."
     }];
   }
 
   return [{
     type: aio.catalogs.length ? "good" : "warn",
-    title: "aiometadata Catalogs",
+    title: "AIOMetadata Catalogs",
     message: `${aio.catalogs.length} catalog${aio.catalogs.length === 1 ? "" : "s"} detected.`
   }];
 }
@@ -1071,7 +1071,7 @@ function buildJsonObject() {
     creator,
     status: "Community",
     platforms: ["Nuvio"],
-    catalogLayer: "aiometadata",
+    catalogLayer: "AIOMetadata",
     packageType: text(document.getElementById("packageType").value, "Nuvio Collection Pack"),
     buildType: text(document.getElementById("buildType").value, "Community Build"),
     category,
@@ -1085,7 +1085,7 @@ function buildJsonObject() {
     nuvioJson: "nuvio-collections.json",
     aioJson: "aiometadata-catalogs.json",
     artworkHosting: "Hosted URLs",
-    importStyle: "Nuvio collections JSON + aiometadata catalog export",
+    importStyle: "Nuvio collections JSON + AIOMetadata catalog export",
     setupNotes: linesFromTextarea("setupNotes"),
     knownIssues: linesFromTextarea("knownIssues")
   };
@@ -1146,7 +1146,7 @@ Detected Stats:
 - Catalog Sources: ${stats.sources}
 - Artwork URLs: ${stats.artwork}
 - Focus GIFs: ${stats.focusGifs}
-- aiometadata Catalogs: ${stats.aioCatalogs}
+- AIOMetadata Catalogs: ${stats.aioCatalogs}
 
 Files to Attach:
 - build.json
@@ -1164,7 +1164,7 @@ ${build.tags.join(", ") || "None"}
 
 Reviewer Checklist:
 - Confirm Nuvio JSON imports correctly.
-- Confirm aiometadata catalog export imports correctly.
+- Confirm AIOMetadata catalog export imports correctly.
 - Confirm catalog IDs are valid or clearly instance-specific.
 - Confirm artwork URLs load.
 - Confirm build category and language metadata are accurate.`;
@@ -1254,7 +1254,7 @@ async function generatePackage() {
   } catch (error) {
     validationMessages.push({
       type: "bad",
-      title: "aiometadata JSON",
+      title: "AIOMetadata JSON",
       message: error.message
     });
   }
