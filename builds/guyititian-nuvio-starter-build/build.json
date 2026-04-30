@@ -9,7 +9,7 @@
   "language": "English",
   "languageCode": "en",
   "languageNotes": "Folder titles, setup notes, and build description are written in English.",
-  "description": "A Nuvio-ready starter build with collection artwork previews, folder organization, catalog source references, and a matching AIOMetadata catalog export.",
+  "description": "A Nuvio-ready starter build with collection artwork previews, folder organization, catalog source references, and a matching AIOMetadata catalog JSON.",
   "tags": ["nuvio", "AIOMetadata", "franchises", "genres", "decades", "networks", "media-tiles"],
   "version": "1.0",
   "lastUpdated": "2026-04-29",
