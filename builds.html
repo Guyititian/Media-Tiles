@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Builds | Media Tiles</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 32px;
+      background: #111;
+      color: #f5f5f5;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #bbb;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 2.4rem;
+    }
+
+    .subtitle {
+      color: #bbb;
+      margin-bottom: 26px;
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      margin-bottom: 22px;
+    }
+
+    input {
+      width: 100%;
+      max-width: 520px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: #1b1b1b;
+      color: #f5f5f5;
+      font-size: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #1d1d1d;
+      border: 1px solid #333;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .preview {
+      aspect-ratio: 16 / 9;
+      background: #0c0c0c;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 2px;
+    }
+
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #0c0c0c;
+    }
+
+    .body {
+      padding: 18px;
+    }
+
+    .body h2 {
+      margin: 0 0 8px;
+      font-size: 1.25rem;
+    }
+
+    .body p {
+      margin: 0 0 14px;
+      color: #bbb;
+      line-height: 1.5;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+
+    .meta div {
+      background: #151515;
+      border: 1px solid #2d2d2d;
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+    .button {
+      display: inline-block;
+      background: #f5f5f5;
+      color: #111;
+      border-radius: 10px;
+      padding: 10px 13px;
+      font-weight: 700;
+    }
+
+    .empty,
+    .error {
+      background: #1d1d1d;
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 18px;
+      color: #bbb;
+    }
+
+    .error {
+      border-color: #7f1d1d;
+      color: #fecaca;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="browse.html">Library</a>
+      <a href="builds.html">Builds</a>
+    </nav>
+
+    <h1>Builds</h1>
+    <p class="subtitle">
+      Browse Nuvio-ready collection packs with artwork previews, catalog summaries, setup notes, and downloadable JSON files.
+    </p>
+
+    <div class="toolbar">
+      <input id="searchInput" type="search" placeholder="Search builds..." />
+    </div>
+
+    <section id="grid" class="grid">
+      <div class="empty">Loading builds...</div>
+    </section>
+  </main>
+
+  <script>
+    const grid = document.getElementById("grid");
+    const searchInput = document.getElementById("searchInput");
+
+    let builds = [];
+
+    function pathFor(slug, file) {
+      return `builds/${encodeURIComponent(slug)}/${file}`;
+    }
+
+    function text(value, fallback = "") {
+      return value === undefined || value === null || value === "" ? fallback : String(value);
+    }
+
+    function collectionsFrom(nuvio) {
+      return Array.isArray(nuvio) ? nuvio : [];
+    }
+
+    function foldersFrom(nuvio) {
+      return collectionsFrom(nuvio).flatMap(collection => Array.isArray(collection.folders) ? collection.folders : []);
+    }
+
+    function statsFrom(nuvio) {
+      const collections = collectionsFrom(nuvio);
+      const folders = foldersFrom(nuvio);
+      const sources = folders.flatMap(folder => Array.isArray(folder.catalogSources) ? folder.catalogSources : []);
+
+      return {
+        collections: collections.length,
+        folders: folders.length,
+        sources: sources.length
+      };
+    }
+
+    function previewImagesFrom(nuvio) {
+      const images = [];
+
+      for (const folder of foldersFrom(nuvio)) {
+        if (folder.coverImageUrl && !images.includes(folder.coverImageUrl)) {
+          images.push(folder.coverImageUrl);
+        }
+
+        if (images.length >= 4) break;
+      }
+
+      return images;
+    }
+
+    function render() {
+      const query = searchInput.value.trim().toLowerCase();
+
+      const visible = builds.filter(build => {
+        const haystack = [
+          build.title,
+          build.creator,
+          build.status,
+          build.category,
+          build.description,
+          ...(build.tags || [])
+        ].join(" ").toLowerCase();
+
+        return !query || haystack.includes(query);
+      });
+
+      if (!visible.length) {
+        grid.innerHTML = `<div class="empty">No builds found.</div>`;
+        return;
+      }
+
+      grid.innerHTML = visible.map(build => {
+        const stats = build.stats || {};
+        const images = build.previewImages || [];
+
+        const imageHtml = images.length
+          ? images.map(src => `<img src="${src}" alt="" loading="lazy" onerror="this.style.display='none'">`).join("")
+          : `<div style="grid-column:1/-1;display:grid;place-items:center;color:#777;">No preview</div>`;
+
+        return `
+          <article class="card">
+            <div class="preview">${imageHtml}</div>
+
+            <div class="body">
+              <h2>${text(build.title, "Untitled Build")}</h2>
+              <p>${text(build.description, "No description provided.")}</p>
+
+              <div class="meta">
+                <div>Collections: <strong>${stats.collections ?? "—"}</strong></div>
+                <div>Folders: <strong>${stats.folders ?? "—"}</strong></div>
+                <div>Sources: <strong>${stats.sources ?? "—"}</strong></div>
+                <div>Status: <strong>${text(build.status, "Community")}</strong></div>
+              </div>
+
+              <a class="button" href="build.html?slug=${encodeURIComponent(build.slug)}">View Build</a>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function load() {
+      try {
+        const indexResponse = await fetch("builds/index.json", { cache: "no-store" });
+        if (!indexResponse.ok) throw new Error("Could not load builds/index.json");
+
+        const index = await indexResponse.json();
+
+        builds = await Promise.all(index.map(async item => {
+          const buildResponse = await fetch(pathFor(item.slug, "build.json"), { cache: "no-store" });
+          if (!buildResponse.ok) throw new Error(`Could not load build.json for ${item.slug}`);
+
+          const build = await buildResponse.json();
+
+          let nuvio = [];
+          const nuvioResponse = await fetch(pathFor(item.slug, build.nuvioJson || "nuvio-collections.json"), { cache: "no-store" });
+          if (nuvioResponse.ok) {
+            nuvio = await nuvioResponse.json();
+          }
+
+          return {
+            ...build,
+            featured: Boolean(item.featured),
+            stats: statsFrom(nuvio),
+            previewImages: previewImagesFrom(nuvio)
+          };
+        }));
+
+        builds.sort((a, b) => Number(b.featured) - Number(a.featured) || text(a.title).localeCompare(text(b.title)));
+        render();
+      } catch (error) {
+        console.error(error);
+        grid.innerHTML = `
+          <div class="error">
+            Could not load builds. Check that builds/index.json exists and that each listed build folder contains build.json and nuvio-collections.json.
+          </div>
+        `;
+      }
+    }
+
+    searchInput.addEventListener("input", render);
+    load();
+  </script>
+</body>
+</html>
