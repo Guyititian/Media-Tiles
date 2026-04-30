@@ -35,7 +35,7 @@ body {
 /* MAIN CARD */
 .shell {
   width:100%;
-  max-width:980px;
+  max-width:1080px;
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
   border: 1px solid var(--border);
   border-radius: 22px;
@@ -68,15 +68,13 @@ body {
 
 /* FEATURE CARDS */
 .grid {
-  display:flex;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap:22px;
-  justify-content:center;
   margin-top: 30px;
-  flex-wrap:wrap;
 }
 
 .card {
-  width: 300px;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -85,6 +83,7 @@ body {
   transition: all 0.25s ease;
   position: relative;
   overflow:hidden;
+  min-height: 120px;
 }
 
 /* DEPTH LAYER */
@@ -106,6 +105,12 @@ body {
 
 .card:hover::before {
   opacity:1;
+}
+
+.card h2,
+.card p {
+  position: relative;
+  z-index: 1;
 }
 
 .card h2 {
@@ -133,6 +138,31 @@ body {
   height:1px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
   margin: 30px 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .wrapper {
+    padding: 22px;
+  }
+
+  .shell {
+    padding: 42px 24px;
+  }
+
+  .brand h1 {
+    font-size: 34px;
+  }
 }
 
 </style>
