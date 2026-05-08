@@ -11,7 +11,8 @@ const categories = [
   "networks",
   "people",
   "studios",
-  "special"
+  "special",
+  "backdrops"
 ];
 
 async function fetchCategory(category) {
