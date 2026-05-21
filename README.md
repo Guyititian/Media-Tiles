@@ -24,7 +24,9 @@ Media Tiles is a structured image library built around categories like:
 - Networks  
 - Studios  
 - People  
-- Special collections  
+- Special collections
+- Backdrops
+- Title Logos
 
 Each tile links directly to a hosted image that can be copied and reused instantly.
 
