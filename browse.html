@@ -1,470 +1,307 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
 <title>Media Tiles Library</title>
 
 <style>
-
 :root {
-
- --bg: #0b0f14;
-
- --panel: #121823;
-
- --panel-2: #0f141d;
-
- --text: #e8eef7;
-
- --muted: rgba(232, 238, 247, 0.6);
-
- --accent: #7aa2ff;
-
- --border: rgba(255,255,255,0.06);
- --shadow: 0 20px 60px rgba(0,0,0,0.55);
-
+  --bg: #0b0f14;
+  --panel: #121823;
+  --panel-2: #0f141d;
+  --text: #e8eef7;
+  --muted: rgba(232, 238, 247, 0.6);
+  --accent: #7aa2ff;
+  --border: rgba(255,255,255,0.06);
+  --shadow: 0 20px 60px rgba(0,0,0,0.55);
 }
 
 * { box-sizing: border-box; }
 
 body {
-
- margin:0;
-
- background: radial-gradient(1200px 800px at 50% 10%, #141b2a 0%, var(--bg) 60%);
-
- color: var(--text);
-
- font-family: system-ui, -apple-system, Segoe UI, Arial;
-
+  margin:0;
+  background: radial-gradient(1200px 800px at 50% 10%, #141b2a 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Arial;
 }
 
 .page { padding: 28px; }
 
-/* HEADER */
-
 .header {
-
- max-width:1100px;
-
- margin: 0 auto 18px auto;
-
- background: linear-gradient(180deg, var(--panel), var(--panel-2));
-
- border: 1px solid var(--border);
-
- border-radius: 18px;
-
- padding: 18px 22px;
- box-shadow: var(--shadow);
-
+  max-width:1100px;
+  margin: 0 auto 18px auto;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px 22px;
+  box-shadow: var(--shadow);
 }
 
 .brand-row {
-
- display:flex;
-
- align-items:center;
-
- justify-content:space-between;
-
- gap:16px;
-
- margin-bottom: 14px;
-
- padding: 10px 12px;
-
- border-radius: 14px;
-
- background: rgba(255,255,255,0.02);
-
- border: 1px solid rgba(255,255,255,0.04);
-
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 
 .brand {
-
- font-size: 32px;
-
- font-weight: 900;
-
- cursor: pointer;
-
- letter-spacing: 0.5px;
-
+  font-size: 32px;
+  font-weight: 900;
+  cursor: pointer;
+  letter-spacing: 0.5px;
 }
 
 .brand span { color: var(--accent); }
 
 .ecosystem-nav {
-
- display:flex;
-
- gap:10px;
-
- flex-wrap:wrap;
-
- justify-content:flex-end;
-
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 
 .nav-btn {
-
- padding:6px 10px;
-
- border-radius:10px;
-
- font-size:12px;
-
- border:1px solid var(--border);
-
- background: rgba(255,255,255,0.03);
-
- color: var(--muted);
-
- cursor:pointer;
-
- text-decoration:none;
-
- display:inline-block;
-
- transition:0.2s;
-
+  padding:6px 10px;
+  border-radius:10px;
+  font-size:12px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--muted);
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+  transition:0.2s;
 }
 
 .nav-btn:hover {
-
- transform: translateY(-2px);
-
- color: var(--text);
-
- border-color: rgba(122,162,255,0.25);
-
+  transform: translateY(-2px);
+  color: var(--text);
+  border-color: rgba(122,162,255,0.25);
 }
 
 .nav-btn.active {
-
- background: rgba(122,162,255,0.15);
-
- border-color: rgba(122,162,255,0.35);
-
- color: var(--text);
- box-shadow: 0 10px 30px rgba(122,162,255,0.08);
-
+  background: rgba(122,162,255,0.15);
+  border-color: rgba(122,162,255,0.35);
+  color: var(--text);
+  box-shadow: 0 10px 30px rgba(122,162,255,0.08);
 }
 
-/* SECTION TITLE */
-
 .section-title {
-
- text-align:center;
-
- margin: 28px 0 26px 0;
-
+  text-align:center;
+  margin: 28px 0 26px 0;
 }
 
 .section-title h1 {
-
- font-size: 42px;
-
- letter-spacing: 1px;
-
- margin: 0;
-
- font-weight: 800;
-
+  font-size: 42px;
+  letter-spacing: 1px;
+  margin: 0;
+  font-weight: 800;
 }
 
 .section-title h1 span {
-
- color: var(--accent);
-
+  color: var(--accent);
 }
 
 .section-title p {
-
- margin-top: 10px;
-
- font-size: 14px;
-
- color: var(--muted);
-
- line-height:1.5;
-
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height:1.5;
 }
 
 .divider {
-
- height:1px;
-
- background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
- margin: 28px 0;
-
+  height:1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  margin: 28px 0;
 }
-
-/* SEARCH */
 
 input {
-
- width:100%;
-
- display:block;
-
- padding:12px 14px;
-
- border-radius:12px;
-
- border:1px solid var(--border);
-
- background: rgba(255,255,255,0.03);
-
- color: var(--text);
-
- outline:none;
-
- margin-top:10px;
-
+  width:100%;
+  display:block;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  outline:none;
+  margin-top:10px;
 }
 
-/* TABS */
-
 .tabs {
-
- display:flex;
-
- gap:10px;
-
- flex-wrap:wrap;
-
- margin-top:12px;
-
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
 }
 
 .tab {
-
- padding:8px 12px;
-
- border-radius:10px;
-
- font-size:13px;
-
- cursor:pointer;
-
- background: rgba(255,255,255,0.03);
-
- border:1px solid var(--border);
- color: var(--muted);
-
- transition:0.2s;
-
+  padding:8px 12px;
+  border-radius:10px;
+  font-size:13px;
+  cursor:pointer;
+  background: rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  color: var(--muted);
+  transition:0.2s;
 }
 
 .tab:hover { transform: translateY(-2px); }
 
 .tab.active {
-
- background: rgba(122,162,255,0.15);
-
- border-color: rgba(122,162,255,0.35);
-
- color: var(--text);
-
+  background: rgba(122,162,255,0.15);
+  border-color: rgba(122,162,255,0.35);
+  color: var(--text);
 }
 
-/* GRID */
 #app {
+  max-width:1100px;
+  margin: 0 auto;
+}
 
- max-width:1100px;
+section {
+  margin-bottom: 28px;
+}
 
- margin: 0 auto;
-
+section h2 {
+  margin: 18px 0 12px 0;
+  font-size: 22px;
+  letter-spacing: 0.3px;
 }
 
 .grid {
-
- display:grid;
-
- grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-
- gap:14px;
-
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap:14px;
 }
 
 .tile {
-
- background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-
- border: 1px solid var(--border);
-
- border-radius: 14px;
-
- overflow:hidden;
-
- display:flex;
-
- flex-direction:column;
-
- box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-
- transition:0.25s;
-
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transition:0.25s;
 }
 
 .tile:hover {
-
- transform: translateY(-6px);
- box-shadow: 0 18px 55px rgba(0,0,0,0.55);
-
- border-color: rgba(122,162,255,0.25);
-
+  transform: translateY(-6px);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.55);
+  border-color: rgba(122,162,255,0.25);
 }
 
-.tile img {
-
- width:100%;
-
- aspect-ratio:16/9;
-
- object-fit:cover;
-
- cursor:pointer;
-
+.tile img,
+.tile video {
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  cursor:pointer;
+  background: rgba(255,255,255,0.03);
 }
 
 .tile-title {
-
- padding:10px;
-
- font-size:13px;
-
- color: var(--text);
-
+  padding:10px;
+  font-size:13px;
+  color: var(--text);
+  min-height: 38px;
 }
 
 .tile button {
-
- margin:10px;
-
- padding:8px;
-
- border-radius:10px;
-
- border:1px solid var(--border);
-
- background: rgba(255,255,255,0.03);
-
- color: var(--text);
-
- cursor:pointer;
-
+  margin:10px;
+  padding:8px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  cursor:pointer;
 }
+
+.empty-message {
+  color: var(--muted);
+  font-size: 14px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+}
+
 #toast {
-
- position: fixed;
-
- bottom: 20px;
-
- left: 50%;
-
- transform: translateX(-50%);
-
- background: #fff;
-
- color:#000;
-
- padding:10px 14px;
-
- border-radius:10px;
-
- opacity:0;
-
- transition:0.2s;
-
- pointer-events:none;
-
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color:#000;
+  padding:10px 14px;
+  border-radius:10px;
+  opacity:0;
+  transition:0.2s;
+  pointer-events:none;
 }
 
 @media (max-width: 720px) {
+  .page {
+    padding: 20px;
+  }
 
- .page {
+  .brand-row {
+    flex-direction:column;
+    align-items:flex-start;
+  }
 
- padding: 20px;
+  .ecosystem-nav {
+    justify-content:flex-start;
+  }
 
- }
+  .brand {
+    font-size:28px;
+  }
 
- .brand-row {
-
- flex-direction:column;
-
- align-items:flex-start;
-
- }
-
- .ecosystem-nav {
-
- justify-content:flex-start;
-
- }
-
- .brand {
-
- font-size:28px;
-
- }
-
- .section-title h1 {
-
- font-size:34px;
-
- }
-
+  .section-title h1 {
+    font-size:34px;
+  }
 }
-
 </style>
-
 </head>
+
 <body>
 
 <div class="page">
 
- <div class="header">
+  <div class="header">
 
- <div class="brand-row">
+    <div class="brand-row">
 
- <div class="brand" id="brand"><span>Media</span> Tiles</div>
+      <div class="brand" id="brand"><span>Media</span> Tiles</div>
 
- <div class="ecosystem-nav">
+      <div class="ecosystem-nav">
+        <a class="nav-btn active" href="./browse.html">Library</a>
+        <a class="nav-btn" href="./builds.html">Builds</a>
+        <a class="nav-btn" href="./submit.html">Submit</a>
+      </div>
 
- <a class="nav-btn active" href="./browse.html">Library</a>
+    </div>
 
- <a class="nav-btn" href="./builds.html">Builds</a>
+    <div class="section-title">
+      <h1><span>Media</span> Library</h1>
+      <p>Browse curated media tiles with structured categories and asset links.</p>
+    </div>
 
- <a class="nav-btn" href="./submit.html">Submit</a>
+    <div class="divider"></div>
 
-</div>
+    <input id="search" placeholder="Search library..." />
 
- </div>
+    <div class="tabs" id="tabs"></div>
 
- <div class="section-title">
+  </div>
 
- <h1><span>Media</span> Library</h1>
-
- <p>Browse curated media tiles with structured categories and asset links.</p>
-
- </div>
- <div class="divider"></div>
-
- <input id="search" placeholder="Search library..." />
-
- <div class="tabs" id="tabs"></div>
-
- </div>
-
- <div id="app">Loading...</div>
+  <div id="app">Loading...</div>
 
 </div>
 
@@ -473,244 +310,379 @@ input {
 <script src="assets.js"></script>
 
 <script>
-
 let allItems = [];
-
+let loadedCategoryResults = [];
 let currentCategory = "all";
 
-const safeCategories = (typeof categories !== "undefined")
-
- ? categories
-
- : ["genres","franchises","decades","networks","people","studios","special"];
+const preferredCategories = (typeof categories !== "undefined" && Array.isArray(categories))
+  ? categories
+  : ["genres","franchises","decades","networks","people","studios","special","backdrops","titles","genre-titles","decade-titles"];
 
 const categoryLabels = {
- "all": "All",
- "genres": "Genres",
- "franchises": "Franchises",
- "decades": "Decades",
- "networks": "Networks",
- "people": "People",
- "studios": "Studios",
- "special": "Special",
- "backdrops": "Backdrops",
- "titles": "Titles",
- "genre-titles": "Genre Titles"
- "decade-titles": "Decade Titles"
+  "all": "All",
+  "genres": "Genres",
+  "franchises": "Franchises",
+  "decades": "Decades",
+  "networks": "Networks",
+  "people": "People",
+  "studios": "Studios",
+  "special": "Special",
+  "backdrops": "Backdrops",
+  "titles": "Titles",
+  "genre-titles": "Genre Titles",
+  "decade-titles": "Decade Titles"
 };
 
 function categoryLabel(category) {
- if (categoryLabels[category]) return categoryLabels[category];
+  if (categoryLabels[category]) return categoryLabels[category];
 
- return String(category)
- .replace(/[-_]+/g, " ")
- .split(" ")
- .filter(Boolean)
- .map(word => word.charAt(0).toUpperCase() + word.slice(1))
- .join(" ");
+  return String(category)
+    .replace(/[-_]+/g, " ")
+    .split(" ")
+    .filter(Boolean)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
-function copy(text) {
- navigator.clipboard.writeText(text);
+function prettyName(name) {
+  return String(name)
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, letter => letter.toUpperCase());
+}
 
- const t = document.getElementById("toast");
+function isSupportedAsset(filename) {
+  return /\.(jpeg|jpg|png|webp|gif|mp4)$/i.test(filename);
+}
 
- t.style.opacity = 1;
+function isVideo(url) {
+  return /\.(mp4)$/i.test(url);
+}
 
- setTimeout(()=>t.style.opacity=0, 900);
+function encodePathPart(value) {
+  return encodeURIComponent(String(value));
+}
 
+function showToast(message = "Copied") {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.style.opacity = 1;
+  setTimeout(() => toast.style.opacity = 0, 900);
+}
+
+async function copy(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("Copied");
+  } catch (error) {
+    showToast("Copy failed");
+  }
 }
 
 document.getElementById("brand").onclick = () => {
-
- window.location.href = "index.html";
-
+  window.location.href = "index.html";
 };
 
-async function fetchCategory(category) {
+async function fetchWithTimeout(url, timeoutMs = 12000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
- try {
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    return response;
+  } catch (error) {
+    clearTimeout(timeout);
+    throw error;
+  }
+}
 
- const res = await fetch(
+async function getExistingCollectionFolders() {
+  const url = "https://api.github.com/repos/Guyititian/media-tiles/contents/collections";
+  const res = await fetchWithTimeout(url);
 
- `https://api.github.com/repos/Guyititian/media-tiles/contents/collections/${category}`
+  if (!res.ok) {
+    throw new Error(`Could not load collections folder. GitHub returned ${res.status}.`);
+  }
 
- );
+  const data = await res.json();
 
- if (!res.ok) return [];
+  if (!Array.isArray(data)) {
+    throw new Error("Collections folder did not return a folder listing.");
+  }
 
- const data = await res.json();
- if (!Array.isArray(data)) return [];
+  return data
+    .filter(item => item && item.type === "dir" && item.name)
+    .map(item => item.name);
+}
 
- return data
+async function loadCategory(category) {
+  try {
+    const encodedCategory = encodePathPart(category);
+    const url = `https://api.github.com/repos/Guyititian/media-tiles/contents/collections/${encodedCategory}`;
+    const res = await fetchWithTimeout(url);
 
- .filter(f => f.name.match(/\.(jpeg|jpg|png|webp|gif|mp4)$/i))
+    if (!res.ok) {
+      return {
+        category,
+        items: [],
+        error: `Could not load ${categoryLabel(category)}. GitHub returned ${res.status}.`
+      };
+    }
 
- .map(f => ({
+    const data = await res.json();
 
- name: f.name.replace(/\.[^/.]+$/, ""),
+    if (!Array.isArray(data)) {
+      return {
+        category,
+        items: [],
+        error: `${categoryLabel(category)} did not return a folder listing.`
+      };
+    }
 
- url: `https://Guyititian.github.io/media-tiles/collections/${category}/${f.name}`,
+    const items = data
+      .filter(file => file && file.name && isSupportedAsset(file.name))
+      .map(file => ({
+        name: file.name.replace(/\.[^/.]+$/, ""),
+        url: `https://Guyititian.github.io/media-tiles/collections/${encodedCategory}/${encodeURIComponent(file.name)}`,
+        category
+      }));
 
- category
+    return {
+      category,
+      items,
+      error: ""
+    };
+  } catch (error) {
+    return {
+      category,
+      items: [],
+      error: `Could not load ${categoryLabel(category)}.`
+    };
+  }
+}
 
- }));
+function orderedCategories(existingFolders) {
+  const existingSet = new Set(existingFolders);
 
- } catch (e) {
+  const ordered = preferredCategories.filter(category => existingSet.has(category));
 
- console.warn("Fetch error:", category);
+  const extras = existingFolders
+    .filter(folder => !ordered.includes(folder))
+    .sort((a, b) => a.localeCompare(b));
 
- return [];
+  return [...ordered, ...extras];
+}
 
- }
-
+function currentCategoryList() {
+  return loadedCategoryResults.map(result => result.category);
 }
 
 function buildTabs() {
+  const tabs = document.getElementById("tabs");
+  const availableCategories = currentCategoryList();
 
- const tabs = document.getElementById("tabs");
+  tabs.innerHTML = "";
 
- tabs.innerHTML = "";
+  ["all", ...availableCategories].forEach(category => {
+    const tab = document.createElement("div");
+    tab.className = "tab";
 
- ["all", ...safeCategories].forEach(cat => {
- const d = document.createElement("div");
+    if (category === currentCategory) {
+      tab.classList.add("active");
+    }
 
- d.className = "tab";
+    tab.textContent = categoryLabel(category);
 
- if (cat === currentCategory) d.classList.add("active");
+    tab.onclick = () => {
+      currentCategory = category;
 
- d.textContent = categoryLabel(cat);
+      const url = category === "all"
+        ? "browse.html"
+        : `browse.html?category=${encodeURIComponent(category)}`;
 
- d.onclick = () => {
+      history.pushState({}, "", url);
 
- currentCategory = cat;
+      document.getElementById("search").value = "";
+      renderCurrentView();
+      buildTabs();
+    };
 
- const url = cat === "all"
-
- ? "browse.html"
-
- : `browse.html?category=${cat}`;
-
- history.pushState({}, "", url);
-
- load();
-
- buildTabs();
-
- };
-
- tabs.appendChild(d);
-
- });
-
+    tabs.appendChild(tab);
+  });
 }
 
-async function load() {
+function renderTile(item) {
+  const tile = document.createElement("div");
+  tile.className = "tile";
 
- const app = document.getElementById("app");
- app.innerHTML = "Loading...";
+  let media;
 
- const list = currentCategory === "all"
+  if (isVideo(item.url)) {
+    media = document.createElement("video");
+    media.src = item.url;
+    media.muted = true;
+    media.loop = true;
+    media.playsInline = true;
 
- ? safeCategories
+    media.addEventListener("mouseenter", () => media.play());
+    media.addEventListener("mouseleave", () => {
+      media.pause();
+      media.currentTime = 0;
+    });
+  } else {
+    media = document.createElement("img");
+    media.src = item.url;
+    media.loading = "lazy";
+    media.alt = prettyName(item.name);
+  }
 
- : [currentCategory];
+  media.addEventListener("click", () => copy(item.url));
 
- const results = await Promise.all(list.map(fetchCategory));
+  const title = document.createElement("div");
+  title.className = "tile-title";
+  title.textContent = prettyName(item.name);
 
- allItems = results.flat();
+  const button = document.createElement("button");
+  button.textContent = "Copy Link";
+  button.addEventListener("click", () => copy(item.url));
 
- app.innerHTML = "";
+  tile.appendChild(media);
+  tile.appendChild(title);
+  tile.appendChild(button);
 
- results.forEach((items, i) => {
-
- const cat = list[i];
-
- const section = document.createElement("section");
-
- const title = document.createElement("h2");
-
- title.textContent = categoryLabel(cat);
-
- const grid = document.createElement("div");
- grid.className = "grid";
-
- items.forEach(i => {
-
- const tile = document.createElement("div");
-
- tile.className = "tile";
-
- tile.innerHTML = `
-
- <img src="${i.url}" onclick="copy('${i.url}')"/>
-
- <div class="tile-title">${i.name}</div>
-
- <button onclick="copy('${i.url}')">Copy Link</button>
-
- `;
-
- grid.appendChild(tile);
-
- });
-
- section.appendChild(title);
-
- section.appendChild(grid);
-
- app.appendChild(section);
-
- });
-
+  return tile;
 }
 
-document.getElementById("search").addEventListener("input", e => {
- const q = e.target.value.toLowerCase();
+function renderGrid(items, emptyText = "No assets found.") {
+  if (!items.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty-message";
+    empty.textContent = emptyText;
+    return empty;
+  }
 
- const filtered = allItems.filter(i =>
+  const grid = document.createElement("div");
+  grid.className = "grid";
 
- i.name.toLowerCase().includes(q)
+  items.forEach(item => {
+    grid.appendChild(renderTile(item));
+  });
 
- );
+  return grid;
+}
 
- const app = document.getElementById("app");
+function renderCurrentView() {
+  const app = document.getElementById("app");
+  app.innerHTML = "";
 
- const grid = document.createElement("div");
+  const results = currentCategory === "all"
+    ? loadedCategoryResults
+    : loadedCategoryResults.filter(result => result.category === currentCategory);
 
- grid.className = "grid";
+  if (!results.length) {
+    app.appendChild(renderGrid([], "No categories found."));
+    return;
+  }
 
- filtered.forEach(i => {
+  results.forEach(result => {
+    const section = document.createElement("section");
 
- const tile = document.createElement("div");
+    const title = document.createElement("h2");
+    title.textContent = categoryLabel(result.category);
 
- tile.className = "tile";
+    section.appendChild(title);
+    section.appendChild(
+      renderGrid(
+        result.items,
+        result.error || `No displayable assets found in ${categoryLabel(result.category)}.`
+      )
+    );
 
- tile.innerHTML = `
+    app.appendChild(section);
+  });
+}
 
- <img src="${i.url}" onclick="copy('${i.url}')"/>
+function renderSearchResults(items) {
+  const app = document.getElementById("app");
+  app.innerHTML = "";
+  app.appendChild(renderGrid(items, "No matching assets found."));
+}
 
- <div class="tile-title">${i.name}</div>
+async function loadLibrary() {
+  const app = document.getElementById("app");
+  app.innerHTML = "Loading...";
 
- <button onclick="copy('${i.url}')">Copy Link</button>
- `;
+  try {
+    const existingFolders = await getExistingCollectionFolders();
+    const foldersToLoad = orderedCategories(existingFolders);
 
- grid.appendChild(tile);
+    if (!foldersToLoad.length) {
+      loadedCategoryResults = [];
+      allItems = [];
+      app.innerHTML = "";
+      buildTabs();
+      app.appendChild(renderGrid([], "No collection folders found."));
+      return;
+    }
 
- });
+    const settled = await Promise.allSettled(foldersToLoad.map(loadCategory));
 
- app.innerHTML = "";
+    loadedCategoryResults = settled.map((result, index) => {
+      if (result.status === "fulfilled") return result.value;
 
- app.appendChild(grid);
+      return {
+        category: foldersToLoad[index],
+        items: [],
+        error: `Could not load ${categoryLabel(foldersToLoad[index])}.`
+      };
+    });
 
+    allItems = loadedCategoryResults.flatMap(result => result.items);
+
+    const availableCategories = currentCategoryList();
+
+    if (currentCategory !== "all" && !availableCategories.includes(currentCategory)) {
+      currentCategory = "all";
+    }
+
+    buildTabs();
+    renderCurrentView();
+  } catch (error) {
+    loadedCategoryResults = [];
+    allItems = [];
+    app.innerHTML = "";
+    app.appendChild(renderGrid([], "The library could not load. GitHub may be temporarily unavailable or the collections folder could not be read."));
+  }
+}
+
+document.getElementById("search").addEventListener("input", event => {
+  const query = event.target.value.toLowerCase().trim();
+
+  if (!query) {
+    renderCurrentView();
+    return;
+  }
+
+  const filtered = allItems.filter(item =>
+    item.name.toLowerCase().includes(query) ||
+    categoryLabel(item.category).toLowerCase().includes(query)
+  );
+
+  renderSearchResults(filtered);
 });
 
-buildTabs();
+function getInitialCategoryFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const category = params.get("category");
 
-load();
+  if (category) {
+    currentCategory = category;
+  }
+}
 
+getInitialCategoryFromUrl();
+loadLibrary();
 </script>
 
 </body>
-
 </html>
