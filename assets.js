@@ -13,7 +13,8 @@ const categories = [
   "studios",
   "special",
   "backdrops",
-  "titles"
+  "titles",
+  "genre titles"
 ];
 
 async function fetchCategory(category) {
