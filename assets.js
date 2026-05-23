@@ -14,7 +14,7 @@ const categories = [
   "special",
   "backdrops",
   "titles",
-  "genre titles"
+  "genre-titles"
 ];
 
 async function fetchCategory(category) {
